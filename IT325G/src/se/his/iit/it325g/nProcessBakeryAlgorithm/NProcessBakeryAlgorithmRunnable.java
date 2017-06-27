@@ -17,23 +17,21 @@ import se.his.iit.it325g.common.AndrewsProcess;
  *
  */
 public class NProcessBakeryAlgorithmRunnable implements Runnable {
-	static int n=10;
-	static int turn[]=IntStream.generate(() -> -1).limit(n).toArray(); // defaults to n * -1
 	
 	@Override
 	public void run() {
 		final int i=AndrewsProcess.currentAndrewsProcessId();
 		while (true) {
-			turn[i]=0;
-			turn[i]=Arrays.stream(turn).reduce(-1, (a,b) -> Integer.max(a,b))+1;
-			System.out.println("Thread "+i+" is at stage "+turn[i]);
-			for (int j=0; j<turn.length; ++j) { 
+			GlobalProgramState.turn[i]=0;
+			GlobalProgramState.turn[i]=Arrays.stream(GlobalProgramState.turn).reduce(-1, (a,b) -> Integer.max(a,b))+1;
+			System.out.println("Thread "+i+" is at stage "+GlobalProgramState.turn[i]);
+			for (int j=0; j<GlobalProgramState.turn.length; ++j) { 
 				if (j==i) continue;
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e1) {
 				}
-				while (turn[j]!=-1 && (turn[i]>turn[j] ||(turn[i]==turn[j])&& i>j)) {
+				while (GlobalProgramState.turn[j]!=-1 && (GlobalProgramState.turn[i]>GlobalProgramState.turn[j] ||(GlobalProgramState.turn[i]==GlobalProgramState.turn[j])&& i>j)) {
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException e) {
@@ -45,7 +43,7 @@ public class NProcessBakeryAlgorithmRunnable implements Runnable {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
 			}
-			turn[i]=-1;
+			GlobalProgramState.turn[i]=-1;
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
@@ -54,14 +52,5 @@ public class NProcessBakeryAlgorithmRunnable implements Runnable {
 		}
 	}
 	
-	public static void main(String argv[]) {
-		AndrewsProcess[] process;
-		try {
-			process = AndrewsProcess.andrewsProcessFactory(n, NProcessBakeryAlgorithmRunnable.class);
-			AndrewsProcess.startAndrewsProcesses(process);
-		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
-	}
 
 }

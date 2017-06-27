@@ -25,7 +25,14 @@ public class NProcessBakeryAlgorithmWithBoundedDomainRunnable implements Runnabl
 		final int i=AndrewsProcess.currentAndrewsProcessId();
 		while (true) {
 			turn[i]=0;
-			turn[i]=(Arrays.stream(turn).reduce(-1, (a,b) -> Integer.max(a,b))+1)%(2*n+1);
+			synchronized(turn) {
+				System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+" "+Arrays.toString(turn));
+			}
+			turn[i]=(Arrays.stream(turn).reduce(-1, (a,b) -> ((a>b && (a-b)<=n && a>0 && b>0)||(a<b && (a-b)>n && a>0 && b>0)||(a>0 && b<=0)?a:b) )+1)%(2*n+1);
+			synchronized(turn) {
+				System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+" "+Arrays.toString(turn));
+
+			}
 			System.out.println("Thread "+i+" is at stage "+turn[i]);
 			for (int j=0; j<turn.length; ++j) { 
 				if (j==i) continue;

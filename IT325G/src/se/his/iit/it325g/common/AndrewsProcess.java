@@ -1,13 +1,17 @@
 package se.his.iit.it325g.common;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class AndrewsProcess extends Thread {
 	
 	static private int nextIdentity=0;
 	static private ConcurrentHashMap<Thread,Integer> t2i=new ConcurrentHashMap<Thread,Integer>();
+	static private ConcurrentHashMap<Class<?>,ConcurrentHashMap<Thread,Integer>> c2t2i=new ConcurrentHashMap<Class<?>,ConcurrentHashMap<Thread,Integer>>(); // relative identity with respect to class
 	private int andrewsPid;
+	private int relativeToTypeAndrewsPid;
+	private Class<?> cls;
 	
 	public int getAndrewsPid() {
 		return this.andrewsPid;
@@ -95,22 +99,36 @@ public class AndrewsProcess extends Thread {
 	private final void initialize() {
 		this.andrewsPid=nextAndrewsPid();
 		AndrewsProcess.t2i.put(this,this.andrewsPid);
+		ConcurrentHashMap<Thread, Integer> t2i=AndrewsProcess.c2t2i.get(this.cls);
+		if (t2i==null) {
+			t2i=new ConcurrentHashMap<Thread, Integer>();
+			c2t2i.put(this.cls, t2i);
+		}
+		Integer nextRelativeId=t2i.get(this);
+		if (nextRelativeId==null) {
+			nextRelativeId=0;
+			t2i.put(this, 1);
+		} else {
+			t2i.put(this, nextRelativeId+1);
+		}
+		this.relativeToTypeAndrewsPid=nextRelativeId;
 	}
 
 	public AndrewsProcess() {
 		super();
-		this.initialize();
+		throw new IllegalStateException("In the IT325G course, only threads based on Runnable are allowed");
 	}
 
 	public AndrewsProcess(Runnable target) {
 		super(target);
+		this.cls=target.getClass();
 		this.initialize();
 
 	}
 
 	public AndrewsProcess(String name) {
 		super(name);
-		this.initialize();
+		throw new IllegalStateException("In the IT325G course, only threads based on Runnable are allowed");
 
 	}
 
@@ -122,7 +140,7 @@ public class AndrewsProcess extends Thread {
 
 	public AndrewsProcess(ThreadGroup group, String name) {
 		super(group, name);
-		this.initialize();
+		throw new IllegalStateException("In the IT325G course, only threads based on Runnable are allowed");
 
 	}
 
@@ -146,6 +164,13 @@ public class AndrewsProcess extends Thread {
 	}
 
 	public static int currentAndrewsProcessId() {
+		final int result=t2i.get(Thread.currentThread());
+		return result;
+	}
+	
+	public static int currentRelativeToTypeAndrewsProcessId() {
+		final ConcurrentHashMap<Thread, Integer> t2i=AndrewsProcess.c2t2i.get(((AndrewsProcess)Thread.currentThread()).getClass());
+		
 		final int result=t2i.get(Thread.currentThread());
 		return result;
 	}
