@@ -182,6 +182,9 @@ public class AndrewsProcess extends Thread {
 	}
 
 	public static int currentAndrewsProcessId() {
+		if (Thread.currentThread()==null) {
+			throw new IllegalStateException("Thread does not exist yet, cannot determine process identity");			
+		}
 		final Integer result=t2i.get(Thread.currentThread());
 		if (result==null) {
 			throw new IllegalStateException("Thread does not exist yet, cannot determine process identity");
