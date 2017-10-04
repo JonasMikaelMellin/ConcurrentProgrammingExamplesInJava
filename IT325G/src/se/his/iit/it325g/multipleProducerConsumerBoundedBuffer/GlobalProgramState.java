@@ -4,7 +4,7 @@
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
+//    any later version.
 //
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -30,6 +30,9 @@ public class GlobalProgramState {
 	public static Semaphore full=new Semaphore(0);
 
 	public static void main(String argv[]) {
+		
+		System.out.print(AndrewsProcess.licenseText());
+		
 		RunnableSpecification rs[]=new RunnableSpecification[2];
 		rs[0]=new RunnableSpecification(Producer.class,1);
 		rs[1]=new RunnableSpecification(Consumer.class,1);

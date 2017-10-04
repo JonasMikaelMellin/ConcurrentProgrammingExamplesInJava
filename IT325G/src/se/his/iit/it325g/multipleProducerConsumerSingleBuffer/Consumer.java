@@ -22,10 +22,10 @@ public class Consumer implements Runnable {
 	@Override
 	public void run() {
 		while(true) {
-			GlobalState.full.acquireUninterruptibly();
-			int value=GlobalState.buffer;
+			GlobalProgramState.full.acquireUninterruptibly();
+			int value=GlobalProgramState.buffer;
 			System.out.println("Consumer consumer value "+value);
-			GlobalState.empty.release();
+			GlobalProgramState.empty.release();
 
 		}
 	}

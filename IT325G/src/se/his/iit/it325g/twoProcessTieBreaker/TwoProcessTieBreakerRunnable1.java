@@ -33,10 +33,10 @@ public class TwoProcessTieBreakerRunnable1 implements Runnable {
 	@Override
 	public void run() {
 		while (true) {
-			GlobalState.in1=true;
-			GlobalState.last=1;
+			GlobalProgramState.in1=true;
+			GlobalProgramState.last=1;
 			System.out.println("Thread "+AndrewsProcess.currentAndrewsProcessId()+" is waiting to access critical section");
-			while (GlobalState.in2 && GlobalState.last==1) {
+			while (GlobalProgramState.in2 && GlobalProgramState.last==1) {
 				try {
 					Thread.sleep(500);
 				} catch (InterruptedException e) {
@@ -49,7 +49,7 @@ public class TwoProcessTieBreakerRunnable1 implements Runnable {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			GlobalState.in1=false;
+			GlobalProgramState.in1=false;
 			System.out.println("Thread "+AndrewsProcess.currentAndrewsProcessId()+" is not in critical section");
 		}
 	}

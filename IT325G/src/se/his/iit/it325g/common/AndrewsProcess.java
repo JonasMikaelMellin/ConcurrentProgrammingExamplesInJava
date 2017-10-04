@@ -190,4 +190,11 @@ public class AndrewsProcess extends Thread {
 		final int result=t2i.get(Thread.currentThread());
 		return result;
 	}
+	public static String licenseText() {
+		return "ConcurrentProgrammingExamplesInJava Copyright (C) 2017  Jonas Mikael Mellin\n"+
+				"This program comes with ABSOLUTELY NO WARRANTY; for details, \n"+
+				"see http://www.gnu.org/licenses/ if you have not received the LICENSE file.\n"+
+				"This is free software, and you are welcome to redistribute it\n"+
+				"under certain conditions\n";
+	}
 }

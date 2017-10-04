@@ -33,30 +33,29 @@ import se.his.iit.it325g.common.AndrewsProcess;
  *
  */
 public class NProcessBakeryAlgorithmWithBoundedDomainRunnable implements Runnable {
-	static int n=10;
-	static int turn[]=IntStream.generate(() -> -1).limit(n).toArray(); // defaults to n * -1
+
 	
 	@Override
 	public void run() {
 		final int i=AndrewsProcess.currentAndrewsProcessId();
 		while (true) {
-			turn[i]=0;
-			synchronized(turn) {
-				System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+" "+Arrays.toString(turn));
+			GlobalProgramState.turn[i]=0;
+			synchronized(GlobalProgramState.turn) {
+				System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+" "+Arrays.toString(GlobalProgramState.turn));
 			}
-			turn[i]=(Arrays.stream(turn).reduce(-1, (a,b) -> ((a>b && (a-b)<=n && a>0 && b>0)||(a<b && (a-b)>n && a>0 && b>0)||(a>0 && b<=0)?a:b) )+1)%(2*n+1);
-			synchronized(turn) {
-				System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+" "+Arrays.toString(turn));
+			GlobalProgramState.turn[i]=(Arrays.stream(GlobalProgramState.turn).reduce(-1, (a,b) -> ((a>b && (a-b)<=GlobalProgramState.n && a>0 && b>0)||(a<b && (a-b)>GlobalProgramState.n && a>0 && b>0)||(a>0 && b<=0)?a:b) )+1)%(2*GlobalProgramState.n+1);
+			synchronized(GlobalProgramState.turn) {
+				System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+" "+Arrays.toString(GlobalProgramState.turn));
 
 			}
-			System.out.println("Thread "+i+" is at stage "+turn[i]);
-			for (int j=0; j<turn.length; ++j) { 
+			System.out.println("Thread "+i+" is at stage "+GlobalProgramState.turn[i]);
+			for (int j=0; j<GlobalProgramState.turn.length; ++j) { 
 				if (j==i) continue;
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e1) {
 				}
-				while (turn[j]!=-1 && ((turn[i]>turn[j] && turn[i]-turn[j]<=n)|| (turn[i]<turn[j] && turn[j]-turn[i]>n)||(turn[i]==turn[j])&& i>j)) {
+				while (GlobalProgramState.turn[j]!=-1 && ((GlobalProgramState.turn[i]>GlobalProgramState.turn[j] && GlobalProgramState.turn[i]-GlobalProgramState.turn[j]<=GlobalProgramState.n)|| (GlobalProgramState.turn[i]<GlobalProgramState.turn[j] && GlobalProgramState.turn[j]-GlobalProgramState.turn[i]>GlobalProgramState.n)||(GlobalProgramState.turn[i]==GlobalProgramState.turn[j])&& i>j)) {
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException e) {
@@ -68,7 +67,7 @@ public class NProcessBakeryAlgorithmWithBoundedDomainRunnable implements Runnabl
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
 			}
-			turn[i]=-1;
+			GlobalProgramState.turn[i]=-1;
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
@@ -77,14 +76,6 @@ public class NProcessBakeryAlgorithmWithBoundedDomainRunnable implements Runnabl
 		}
 	}
 	
-	public static void main(String argv[]) {
-		AndrewsProcess[] process;
-		try {
-			process = AndrewsProcess.andrewsProcessFactory(n, NProcessBakeryAlgorithmWithBoundedDomainRunnable.class);
-			AndrewsProcess.startAndrewsProcesses(process);
-		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
-	}
+
 
 }

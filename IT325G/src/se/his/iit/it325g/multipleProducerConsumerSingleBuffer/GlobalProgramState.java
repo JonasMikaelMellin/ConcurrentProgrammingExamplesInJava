@@ -14,27 +14,31 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package se.his.iit.it325g.twoProcessTieBreaker;
+package se.his.iit.it325g.multipleProducerConsumerSingleBuffer;
+
+import java.util.concurrent.Semaphore;
 
 import se.his.iit.it325g.common.AndrewsProcess;
 import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
 
-public class GlobalState {
-	
-	static boolean in1=false;
-	static boolean in2=false;
-	static int last=1;
-
+public class GlobalProgramState {
+	public static int buffer;
+	public static Semaphore empty=new Semaphore(1);
+	public static Semaphore full=new Semaphore(0);
 
 	public static void main(String argv[]) {
+		
+		System.out.print(AndrewsProcess.licenseText());
+
 		RunnableSpecification rs[]=new RunnableSpecification[2];
-		AndrewsProcess[] process;
+		rs[0]=new RunnableSpecification(Producer.class,10);
+		rs[1]=new RunnableSpecification(Consumer.class,20);
 		try {
-			rs[0]=new RunnableSpecification(TwoProcessTieBreakerRunnable1.class,1);
-			rs[1]=new RunnableSpecification(TwoProcessTieBreakerRunnable2.class,1);
-			process = AndrewsProcess.andrewsProcessFactory(rs);
+			AndrewsProcess process[]=AndrewsProcess.andrewsProcessFactory(rs);
 			AndrewsProcess.startAndrewsProcesses(process);
-		} catch (InstantiationException | IllegalAccessException e) {
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
 	}

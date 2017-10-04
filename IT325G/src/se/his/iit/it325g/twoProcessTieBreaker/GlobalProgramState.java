@@ -17,37 +17,29 @@
 package se.his.iit.it325g.twoProcessTieBreaker;
 
 import se.his.iit.it325g.common.AndrewsProcess;
+import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
 
-
-/**
- * @author melj
- * 
- * Java implementation of Tie breaker process solution from "Concurrent Programming" by Gregory andrews.
- * 
- * 
- *
- */
-public class TwoProcessTieBreakerRunnable2 implements Runnable {
-
+public class GlobalProgramState {
 	
-	@Override
-	public void run() {
-		while (true) {
-			GlobalProgramState.in2=true;
-			GlobalProgramState.last=2;
-			System.out.println("Thread "+AndrewsProcess.currentAndrewsProcessId()+" is waiting to access critical section");
-			while (GlobalProgramState.in1 && GlobalProgramState.last==2) {
-				try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-			System.out.println("Thread "+AndrewsProcess.currentAndrewsProcessId()+" is in critical section");
-			GlobalProgramState.in2=false;
-			System.out.println("Thread "+AndrewsProcess.currentAndrewsProcessId()+" is not in critical section");
+	static boolean in1=false;
+	static boolean in2=false;
+	static int last=1;
+
+
+	public static void main(String argv[]) {
+		
+		System.out.print(AndrewsProcess.licenseText());
+
+		RunnableSpecification rs[]=new RunnableSpecification[2];
+		AndrewsProcess[] process;
+		try {
+			rs[0]=new RunnableSpecification(TwoProcessTieBreakerRunnable1.class,1);
+			rs[1]=new RunnableSpecification(TwoProcessTieBreakerRunnable2.class,1);
+			process = AndrewsProcess.andrewsProcessFactory(rs);
+			AndrewsProcess.startAndrewsProcesses(process);
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
 		}
 	}
-	
 
 }

@@ -26,6 +26,9 @@ public class GlobalProgramState {
 	static int turn[]=IntStream.generate(() -> -1).limit(n).toArray(); // defaults to n * -1
 
 	public static void main(String argv[]) {
+		
+		System.out.print(AndrewsProcess.licenseText());
+
 		AndrewsProcess[] process;
 		try {
 			process = AndrewsProcess.andrewsProcessFactory(n, NProcessBakeryAlgorithmRunnable.class);

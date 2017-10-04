@@ -32,6 +32,9 @@ public class GlobalProgramState {
 	public static Semaphore mutexF=new Semaphore(1);
 
 	public static void main(String argv[]) {
+		
+		System.out.print(AndrewsProcess.licenseText());
+
 		RunnableSpecification rs[]=new RunnableSpecification[2];
 		rs[0]=new RunnableSpecification(Producer.class,10);
 		rs[1]=new RunnableSpecification(Consumer.class,10);
