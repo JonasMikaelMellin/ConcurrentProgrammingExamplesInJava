@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
+import se.his.se.iit.it325g.common.exception.AndrewsProcessNotYetInitialized;
+
 public class AndrewsProcess extends Thread {
 	
 	static private int nextIdentity=0;
@@ -139,7 +141,7 @@ public class AndrewsProcess extends Thread {
 		super(target);
 		this.cls=target.getClass();
 		this.initialize();
-
+		
 	}
 
 	public AndrewsProcess(String name) {
@@ -180,7 +182,10 @@ public class AndrewsProcess extends Thread {
 	}
 
 	public static int currentAndrewsProcessId() {
-		final int result=t2i.get(Thread.currentThread());
+		final Integer result=t2i.get(Thread.currentThread());
+		if (result==null) {
+			throw new IllegalStateException("Thread does not exist yet, cannot determine process identity");
+		}
 		return result;
 	}
 	

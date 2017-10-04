@@ -14,28 +14,26 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-// This is related to figure 7.1 in the book
+// This is related to figure 7.2 in the book
 
+package se.his.iit.it325g.mergeSorter;
 
-package se.his.iit.it325g.filterProcessAssemblingLinesOfCharacters;
+import se.his.iit.it325g.common.AndrewsProcess;
 
-import se.his.iit.it325g.common.Char;
+public class IntegerSink implements Runnable {
 
-public class FilterProducer implements Runnable {
-
-	private String theMessage[]={
-			"Behold!\n",
-			"This is a message\n"};
-	public FilterProducer() {
+	public IntegerSink() {
 	}
 
 	@Override
 	public void run() {
-		for (int i=0; i<theMessage.length; ++i) {
-			for (int j=0; j<theMessage[i].length(); ++j) {
-				GlobalProgramState.input.send(new Char(theMessage[i].charAt(j)));
-			}
+		Integer value=GlobalProgramState.out.receive();
+		while (value!=GlobalProgramState.endOfStream) {
+			System.out.println(value);
+			value=GlobalProgramState.out.receive();
+
 		}
+		
 	}
 
 }

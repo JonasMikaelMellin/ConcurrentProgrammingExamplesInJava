@@ -14,6 +14,9 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+// This is related to figure 7.1 in the book
+
+
 package se.his.iit.it325g.filterProcessAssemblingLinesOfCharacters;
 
 public class FilterConsumer implements Runnable {
