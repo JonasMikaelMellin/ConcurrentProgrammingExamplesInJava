@@ -50,6 +50,7 @@ public class AndrewsChan<T> {
 			}
 			result=this.queue.poll();
 		}
+		this.notifyAll();
 		return result;
 	}
 	

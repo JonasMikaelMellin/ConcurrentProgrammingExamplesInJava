@@ -122,13 +122,14 @@ public class AndrewsProcess extends Thread {
 			t2i=new ConcurrentHashMap<Thread, Integer>();
 			c2t2i.put(this.cls, t2i);
 		}
-		Integer nextRelativeId=t2i.get(this);
-		if (nextRelativeId==null) {
+		Integer nextRelativeId;
+		if (t2i.isEmpty()) {
 			nextRelativeId=0;
-			t2i.put(this, 1);
 		} else {
-			t2i.put(this, nextRelativeId+1);
+			nextRelativeId=t2i.values().stream().max(Integer::compare).get()+1;
 		}
+		t2i.put(this, nextRelativeId);
+	
 		this.relativeToTypeAndrewsPid=nextRelativeId;
 	}
 
@@ -193,9 +194,17 @@ public class AndrewsProcess extends Thread {
 	}
 	
 	public static int currentRelativeToTypeAndrewsProcessId() {
-		final ConcurrentHashMap<Thread, Integer> t2i=AndrewsProcess.c2t2i.get(((AndrewsProcess)Thread.currentThread()).getClass());
-		
-		final int result=t2i.get(Thread.currentThread());
+		if (Thread.currentThread()==null) {
+			throw new IllegalStateException("Thread does not exist yet, cannot determine process identity");			
+		}
+		final ConcurrentHashMap<Thread, Integer> t2i=AndrewsProcess.c2t2i.get(((AndrewsProcess)Thread.currentThread()).cls);
+		if (t2i==null) {
+			throw new IllegalStateException("Thread does not exist yet, cannot determine process identity");			
+		}
+		final Integer result=t2i.get(Thread.currentThread());
+		if (result==null) {
+			throw new IllegalStateException("Thread does not exist yet, cannot determine process identity");			
+		}
 		return result;
 	}
 	public static String licenseText() {
