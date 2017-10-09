@@ -22,6 +22,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import se.his.se.iit.it325g.common.exception.AndrewsProcessNotYetInitialized;
 
+/**
+ * @author melj
+ *
+ */
 public class AndrewsProcess extends Thread {
 	
 	static private int nextIdentity=0;
@@ -31,14 +35,33 @@ public class AndrewsProcess extends Thread {
 	private int relativeToTypeAndrewsPid;
 	private Class<?> cls;
 	
+	/**
+	 * 
+	 * @return the current Andrews process identity (an integer >= 0)
+	 */
+	
 	public int getAndrewsPid() {
 		return this.andrewsPid;
 	}
+	
+	/**
+	 * 
+	 * @return the next Andrews process identity
+	 */
 	
 	private static synchronized int nextAndrewsPid() {
 		return nextIdentity++;
 	}
 	
+	/**
+	 * An Andrews process factory method that creates <code>n</code> Andrews processes (Java threads) based on
+	 * the Runnable class <code>runnable</code>
+	 * @param n number of Andrews processes to start
+	 * @param runnable the runnable class specification
+	 * @return an array of Andrews process identities
+	 * @throws InstantiationException @see {@link Thread#Thread(Runnable)})
+	 * @throws IllegalAccessException @see {@link Thread#Thread(Runnable)})
+	 */
 	
 	public static AndrewsProcess[] andrewsProcessFactory(int n, Class<? extends Runnable> runnable) throws InstantiationException, IllegalAccessException {
 		
@@ -49,38 +72,48 @@ public class AndrewsProcess extends Thread {
 		return result;
 	}
 	
+	/**
+	 * This class provides a uniform of specifying a set of process specification consisting
+	 * of pairs of Runnable and initial number of processes. 
+	 * 
+	 * @author melj
+	 *
+	 */
 	public static class RunnableSpecification {
-		private Class<? extends Runnable> runnable;
+		private Class<? extends Runnable> runnableCls;
 		private int amount;
 		/**
-		 * @param runnable
-		 * @param amount
+		 * Creates a RunnableSpecification object.
+		 * @param runnableCls the runnable class
+		 * @param amount the amount of initial processes
 		 */
-		public RunnableSpecification(Class<? extends Runnable> runnable, int amount) {
+		public RunnableSpecification(Class<? extends Runnable> runnableCls, int amount) {
 			if (amount <1) {
 				throw new IllegalArgumentException("amount = "+amount+", must be larger than 1");
 			}
-			if (runnable==null) {
+			if (runnableCls==null) {
 				throw new IllegalArgumentException("runnable must not be null");				
 			}
-			this.runnable = runnable;
+			this.runnableCls = runnableCls;
 			this.amount = amount;
 		}
 		/**
+		 * Creates a RunnableSpecification object.
+		 * 
 		 * @param runnable
 		 */
 		public RunnableSpecification(Class<? extends Runnable> runnable) {
 			if (runnable==null) {
 				throw new IllegalArgumentException("runnable must not be null");				
 			}
-			this.runnable = runnable;
+			this.runnableCls = runnable;
 			this.amount=1;
 		}
 		/**
-		 * @return the runnable
+		 * @return the runnable class
 		 */
-		public synchronized final Class<? extends Runnable> getRunnable() {
-			return runnable;
+		public synchronized final Class<? extends Runnable> getRunnableCls() {
+			return runnableCls;
 		}
 		/**
 		 * @return the amount
@@ -91,29 +124,47 @@ public class AndrewsProcess extends Thread {
 		
 		
 	}
+	
+	/**
+	 * Takes an array of RunnableSpecification and returns an array of 
+	 * Andrews processes.
+	 * 
+	 * @param runnableSpecification an array of RunnableSpecification
+	 * @return an array of Adrews process identities
+	 * @throws InstantiationException @see {@link Thread#Thread(Runnable)}
+	 * @throws IllegalAccessException @see {@link Thread#Thread(Runnable)}
+	 */
 	public static AndrewsProcess[] andrewsProcessFactory(RunnableSpecification[] runnableSpecification) throws InstantiationException, IllegalAccessException {
 		final int n=Arrays.asList(runnableSpecification).stream().mapToInt(rs->rs.getAmount()).sum();
 		AndrewsProcess result[]=new AndrewsProcess[n];
 		int i=0;
 		for (RunnableSpecification rs:runnableSpecification) {
 			for (int j=0; j<rs.getAmount(); ++j) {
-				final Class<? extends Runnable> cls=rs.getRunnable();
+				final Class<? extends Runnable> cls=rs.getRunnableCls();
 				result[i++]=new AndrewsProcess(cls.newInstance());
 			}
 		}
 		return result;
 	}
 	private static Runnable newInstance() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * Starts the processes in the array of Andrews processes. 
+	 * @param process
+	 */
 	public static void startAndrewsProcesses(AndrewsProcess process[]) {
 		for (int i=0; i<process.length; ++i) {
 			process[i].start();
 		}
 	}
 	
+	/*
+	 * Initializes internal static structures to keep track of mapping
+	 * of Andrews processes to Threads and vice versa. Further, it also
+	 * keeps track of identities relative to type (Runnable class). 
+	 */
 	private final void initialize() {
 		this.andrewsPid=nextAndrewsPid();
 		AndrewsProcess.t2i.put(this,this.andrewsPid);
@@ -213,5 +264,23 @@ public class AndrewsProcess extends Thread {
 				"see http://www.gnu.org/licenses/ if you have not received the LICENSE file.\n"+
 				"This is free software, and you are welcome to redistribute it\n"+
 				"under certain conditions\n";
+	}
+	
+	/**
+	 * Hides away the interrupt exception and sleeps for the specified amount time. 
+	 * @param millis the number milliseconds that the process should delay. Note, this is
+	 * the minimum amount of time.
+	 */
+	
+	public static void uninterruptibleMinimumDelay(int millis) {
+		long initialMillis=System.currentTimeMillis();
+		long difference=millis+initialMillis-System.currentTimeMillis();
+		while (difference>0) {
+			try {
+				Thread.sleep(difference);
+			} catch(InterruptedException ie) {
+			}
+			difference=millis+initialMillis-System.currentTimeMillis();
+		}
 	}
 }

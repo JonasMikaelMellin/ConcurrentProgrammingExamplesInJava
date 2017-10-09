@@ -45,12 +45,7 @@ public class Server implements Runnable {
 			// client id is relative to the type not relative to all processes
 			GlobalProgramState.reply.get(clientRequest.getClientId()).send(serverResponse);
 			if (this.numberOfSessions<=0) {
-				try {
-					AndrewsProcess.sleep(100);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				AndrewsProcess.uninterruptibleMinimumDelay(100);
 				System.out.println("Final session closed, terminating");
 				System.exit(0);
 			}
