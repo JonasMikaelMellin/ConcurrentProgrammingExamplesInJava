@@ -14,10 +14,13 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package se.his.iit.it325g.allocatorClientServer;
+// based on figure 7.13
+
+package se.his.iit.it325g.peerValueExchange.ring;
 
 
 
+import java.util.Random;
 import java.util.Vector;
 
 import se.his.iit.it325g.common.AndrewsChan;
@@ -26,21 +29,25 @@ import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
 import se.his.iit.it325g.common.Char;
 
 public class GlobalProgramState {
-	public static final int numberOfResources = 100;
-	public static Vector<AndrewsChan<ServerResponse>> reply=new Vector<AndrewsChan<ServerResponse>>();
-	public static AndrewsChan<ClientRequest> request=new AndrewsChan<ClientRequest>();
-	public static int numberOfIterations=100;
-	public static int numberOfClients=10;
+	public static Vector<AndrewsChan<SmallestAndLargestValue>> values=new Vector<AndrewsChan<SmallestAndLargestValue>>();
+	public static int numberOfPeers=10;
+	public static Random random=new Random(1);
 	public static void main(String argv[]) {
 		
 		System.out.print(AndrewsProcess.licenseText());
+		
+		// initialize the channels
 
-		for (int i=0; i<GlobalProgramState.numberOfClients; ++i) {
-			reply.addElement(new AndrewsChan<ServerResponse>());
+		for (int i=0; i<GlobalProgramState.numberOfPeers; ++i) {
+			values.addElement(new AndrewsChan<SmallestAndLargestValue>());
 		}
+		// note that the ordering of the specification is critical
+		// since it maintains implicit assumptions in the program
+		// a more robust implementation is judged to be less
+		// understandable
 		RunnableSpecification rs[]=new RunnableSpecification[2];
-		rs[0]=new RunnableSpecification(ClientSimulation.class,GlobalProgramState.numberOfClients);
-		rs[1]=new RunnableSpecification(Server.class,1);
+		rs[0]=new RunnableSpecification(PeerZeroRunnable.class,1);
+		rs[1]=new RunnableSpecification(PeerRunnable.class,GlobalProgramState.numberOfPeers-1);
 		try {
 			AndrewsProcess process[]=AndrewsProcess.andrewsProcessFactory(rs);
 			AndrewsProcess.startAndrewsProcesses(process);

@@ -25,7 +25,6 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import se.his.iit.it325g.common.AndrewsProcess;
-import se.his.se.iit.it325g.common.exception.AndrewsProcessNotYetInitialized;
 
 public class IntegerSource implements Runnable {
 	private int n=10;

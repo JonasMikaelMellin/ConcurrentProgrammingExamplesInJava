@@ -36,7 +36,7 @@ public class GlobalProgramState {
 			reply.addElement(new AndrewsChan<ServerResponse>());
 		}
 		RunnableSpecification rs[]=new RunnableSpecification[2];
-		rs[0]=new RunnableSpecification(Client.class,2);
+		rs[0]=new RunnableSpecification(ClientSimulation.class,2);
 		rs[1]=new RunnableSpecification(Server.class,1);
 		try {
 			AndrewsProcess process[]=AndrewsProcess.andrewsProcessFactory(rs);

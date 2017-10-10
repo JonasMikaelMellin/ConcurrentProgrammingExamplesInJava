@@ -1,14 +1,12 @@
-package se.his.iit.it325g.allocatorClientServer;
+package se.his.iit.it325g.simpleClientServer;
 
-import java.util.HashSet;
 import java.util.Random;
 
 import se.his.iit.it325g.common.AndrewsProcess;
 
-public class Client implements Runnable {
+public class ClientSimulation implements Runnable {
 	private int clientIdChannel;
-	private HashSet<Integer> allocatedResources=new HashSet<Integer>();
-	public Client() {
+	public ClientSimulation() {
 	}
 
 	private class RandomClientRequest {
@@ -18,35 +16,16 @@ public class Client implements Runnable {
 	
 	private RandomClientRequest generateRandomClientRequest(Random r) {
 		RandomClientRequest randomClientRequest=new RandomClientRequest();
-		if (r.nextDouble()>allocatedResources.size()/(2.0+allocatedResources.size())) {
-			randomClientRequest.number=0;
-
-		} else {
-			randomClientRequest.number=1;
-		}
-			
+		randomClientRequest.number=Math.abs(r.nextInt()%3);
 		switch (randomClientRequest.number) {
 		case 0:
-
-			try {
-				randomClientRequest.clientRequest=new ClientRequestAcquireResource(AndrewsProcess.currentRelativeToTypeAndrewsProcessId());
-			} catch (IncorrectResourceRequest e) {
-				System.out.println("This should not happen");
-				e.printStackTrace();
-			}
+			randomClientRequest.clientRequest=new ClientRequestGetServerValue(AndrewsProcess.currentRelativeToTypeAndrewsProcessId());
 			break;
 		case 1:
-			try {
-				final int index=Math.abs(r.nextInt()%this.allocatedResources.size());
-				Integer intArr[]=new Integer[1];
-				intArr=this.allocatedResources.toArray(intArr);
-				final Integer unitId=intArr[index];
-				this.allocatedResources.remove(unitId);
-				randomClientRequest.clientRequest=new ClientRequestReleaseResource(AndrewsProcess.currentRelativeToTypeAndrewsProcessId(),unitId);
-			} catch (IncorrectResourceRequest e) {
-				System.out.println("This should not happen");
-				e.printStackTrace();
-			}
+			randomClientRequest.clientRequest=new ClientRequestAddValue(AndrewsProcess.currentRelativeToTypeAndrewsProcessId(),r.nextInt());
+			break;
+		case 2:
+			randomClientRequest.clientRequest=new ClientRequestSubtractValue(AndrewsProcess.currentRelativeToTypeAndrewsProcessId(),r.nextInt());
 			break;
 		default:
 			throw new IllegalStateException("We should not be in this state, something severe happened");
@@ -60,7 +39,7 @@ public class Client implements Runnable {
 		// get the identity relative to specific type of process
 		this.clientIdChannel=AndrewsProcess.currentRelativeToTypeAndrewsProcessId();
 		Random r=new Random(this.clientIdChannel);
-		for (int i=0; i<GlobalProgramState.numberOfIterations; ++i) {
+		for (int i=0; i<10; ++i) {
 			final RandomClientRequest randomClientRequest=generateRandomClientRequest(r);
 			final ClientRequest clientRequest=randomClientRequest.clientRequest;
 			System.out.println("Client "+AndrewsProcess.currentAndrewsProcessId()+" with relative identity "+AndrewsProcess.currentRelativeToTypeAndrewsProcessId()+" w.r.t. specific type "+this.getClass().getName()+"\n\tSends request "+clientRequest.getClass().getName());
@@ -69,12 +48,10 @@ public class Client implements Runnable {
 			if (serverResponse.isSuccess()) {
 				switch(randomClientRequest.number) {
 				case 0:
-					this.allocatedResources.add(((ServerResponseWithUnitId)serverResponse).getUnitId());
-					System.out.println("\tClient "+AndrewsProcess.currentAndrewsProcessId()+" Acquire request resulted in allocation of "+((ServerResponseWithUnitId)serverResponse).getUnitId());
+					System.out.println("\tClient "+AndrewsProcess.currentAndrewsProcessId()+" Request resulted in "+((ServerResponseWithValue)serverResponse).getValue());
 					break;
-				case 1: 
-					this.allocatedResources.remove(((ClientRequestReleaseResource)clientRequest).getUnitId());
-					System.out.println("\tClient "+AndrewsProcess.currentAndrewsProcessId()+" Release request of "+((ClientRequestReleaseResource)clientRequest).getUnitId()+" completed with success="+((ServerResponse)serverResponse).isSuccess());
+				case 1: case 2:
+					System.out.println("\tClient "+AndrewsProcess.currentAndrewsProcessId()+" Request completed with success="+((ServerResponse)serverResponse).isSuccess());
 					break;
 				default:
 					throw new IllegalStateException("We should not be in this state, something severe happened");
