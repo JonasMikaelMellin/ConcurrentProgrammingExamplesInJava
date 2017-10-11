@@ -20,15 +20,16 @@ package se.his.iit.it325g.allocatorClientServer;
 
 import java.util.Vector;
 
-import se.his.iit.it325g.common.AndrewsChan;
+import se.his.iit.it325g.common.AsynchronousChan;
+import se.his.iit.it325g.common.Chan;
 import se.his.iit.it325g.common.AndrewsProcess;
 import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
 import se.his.iit.it325g.common.Char;
 
 public class GlobalProgramState {
 	public static final int numberOfResources = 100;
-	public static Vector<AndrewsChan<ServerResponse>> reply=new Vector<AndrewsChan<ServerResponse>>();
-	public static AndrewsChan<ClientRequest> request=new AndrewsChan<ClientRequest>();
+	public static Vector<Chan<ServerResponse>> reply=new Vector<Chan<ServerResponse>>();
+	public static Chan<ClientRequest> request=new AsynchronousChan<ClientRequest>();
 	public static int numberOfIterations=100;
 	public static int numberOfClients=10;
 	public static void main(String argv[]) {
@@ -36,7 +37,7 @@ public class GlobalProgramState {
 		System.out.print(AndrewsProcess.licenseText());
 
 		for (int i=0; i<GlobalProgramState.numberOfClients; ++i) {
-			reply.addElement(new AndrewsChan<ServerResponse>());
+			reply.addElement(new AsynchronousChan<ServerResponse>());
 		}
 		RunnableSpecification rs[]=new RunnableSpecification[2];
 		rs[0]=new RunnableSpecification(ClientSimulation.class,GlobalProgramState.numberOfClients);

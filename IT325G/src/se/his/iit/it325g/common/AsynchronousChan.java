@@ -19,12 +19,13 @@ package se.his.iit.it325g.common;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class AndrewsChan<T> {
+public class AsynchronousChan<T> extends Chan<T> {
 	private LinkedBlockingQueue<T> queue=new LinkedBlockingQueue<T>();
 
-	public AndrewsChan() {
+	public AsynchronousChan() {
 	}
 	
+	@Override
 	public synchronized void send(T value) {
 		while(this.queue.remainingCapacity()<=0) {
 			try {
@@ -37,6 +38,7 @@ public class AndrewsChan<T> {
 		this.queue.add(value);
 		this.notifyAll();
 	}
+	@Override
 	public synchronized T receive() {
 		
 		// block until there is a result

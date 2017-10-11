@@ -18,15 +18,16 @@ package se.his.iit.it325g.filterProcessAssemblingLinesOfCharacters;
 
 
 
-import se.his.iit.it325g.common.AndrewsChan;
+import se.his.iit.it325g.common.AsynchronousChan;
+import se.his.iit.it325g.common.Chan;
 import se.his.iit.it325g.common.AndrewsProcess;
 import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
 import se.his.iit.it325g.common.Char;
 
 public class GlobalProgramState {
 	public static final int MAXLINE = 256;
-	public static AndrewsChan<Char> input=new AndrewsChan<Char>();
-	public static AndrewsChan<String> output=new AndrewsChan<String>();
+	public static Chan<Char> input=new AsynchronousChan<Char>();
+	public static Chan<String> output=new AsynchronousChan<String>();
 	public static void main(String argv[]) {
 		
 		System.out.print(AndrewsProcess.licenseText());

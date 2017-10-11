@@ -20,21 +20,22 @@ package se.his.iit.it325g.mergeSorter;
 
 import java.util.Vector;
 
-import se.his.iit.it325g.common.AndrewsChan;
+import se.his.iit.it325g.common.AsynchronousChan;
+import se.his.iit.it325g.common.Chan;
 import se.his.iit.it325g.common.AndrewsProcess;
 import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
 import se.his.iit.it325g.common.Char;
 
 public class GlobalProgramState {
-	public static Vector<AndrewsChan<Integer>> in=new Vector<AndrewsChan<Integer>>();
-	public static AndrewsChan<Integer> out=new AndrewsChan<Integer>();
+	public static Vector<Chan<Integer>> in=new Vector<Chan<Integer>>();
+	public static Chan<Integer> out=new AsynchronousChan<Integer>();
 	public static Integer endOfStream=Integer.MIN_VALUE; // the sentinel should not be part of the domain, but that complicates the solution
 	public static void main(String argv[]) {
 		
 		System.out.print(AndrewsProcess.licenseText());
 
 		for (int i=0; i<2; ++i) {
-			in.addElement(new AndrewsChan<Integer>());
+			in.addElement(new AsynchronousChan<Integer>());
 		}
 		RunnableSpecification rs[]=new RunnableSpecification[3];
 		rs[0]=new RunnableSpecification(IntegerSource.class,2);

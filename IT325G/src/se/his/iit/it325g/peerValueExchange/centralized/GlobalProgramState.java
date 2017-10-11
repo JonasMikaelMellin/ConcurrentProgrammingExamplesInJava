@@ -23,16 +23,17 @@ package se.his.iit.it325g.peerValueExchange.centralized;
 import java.util.Random;
 import java.util.Vector;
 
-import se.his.iit.it325g.common.AndrewsChan;
+import se.his.iit.it325g.common.AsynchronousChan;
+import se.his.iit.it325g.common.Chan;
 import se.his.iit.it325g.common.AndrewsProcess;
 import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
 import se.his.iit.it325g.common.Char;
 
 public class GlobalProgramState {
-	public static AndrewsChan<Integer> values=new AndrewsChan<Integer>();
+	public static Chan<Integer> values=new AsynchronousChan<Integer>();
 	public static int numberOfPeers=10;
 	public static Random random=new Random(1);
-	public static Vector<AndrewsChan<SmallestAndLargestValue>> result=new Vector<AndrewsChan<SmallestAndLargestValue>>();
+	public static Vector<Chan<SmallestAndLargestValue>> result=new Vector<Chan<SmallestAndLargestValue>>();
 	public static void main(String argv[]) {
 		
 		System.out.print(AndrewsProcess.licenseText());
@@ -40,7 +41,7 @@ public class GlobalProgramState {
 		// initialize the channels
 		result.setSize(numberOfPeers);
 		for (int i=1; i<GlobalProgramState.numberOfPeers; ++i) {
-			result.setElementAt(new AndrewsChan<SmallestAndLargestValue>(),i);
+			result.setElementAt(new AsynchronousChan<SmallestAndLargestValue>(),i);
 		}
 		RunnableSpecification rs[]=new RunnableSpecification[2];
 		rs[0]=new RunnableSpecification(PeerZeroRunnable.class,1);

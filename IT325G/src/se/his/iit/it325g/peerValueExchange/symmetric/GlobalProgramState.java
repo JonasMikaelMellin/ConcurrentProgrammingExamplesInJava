@@ -23,13 +23,13 @@ package se.his.iit.it325g.peerValueExchange.symmetric;
 import java.util.Random;
 import java.util.Vector;
 
-import se.his.iit.it325g.common.AndrewsChan;
+import se.his.iit.it325g.common.AsynchronousChan;
 import se.his.iit.it325g.common.AndrewsProcess;
 import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
 import se.his.iit.it325g.common.Char;
 
 public class GlobalProgramState {
-	public static Vector<AndrewsChan<Integer>> values=new Vector<AndrewsChan<Integer>>();
+	public static Vector<AsynchronousChan<Integer>> values=new Vector<AsynchronousChan<Integer>>();
 	public static int numberOfPeers=10;
 	public static Random random=new Random(1);
 	public static void main(String argv[]) {
@@ -39,7 +39,7 @@ public class GlobalProgramState {
 		// initialize the channels
 
 		for (int i=0; i<GlobalProgramState.numberOfPeers; ++i) {
-			values.addElement(new AndrewsChan<Integer>());
+			values.addElement(new AsynchronousChan<Integer>());
 		}
 		RunnableSpecification rs[]=new RunnableSpecification[1];
 		rs[0]=new RunnableSpecification(PeerRunnable.class,GlobalProgramState.numberOfPeers);

@@ -23,13 +23,13 @@ package se.his.iit.it325g.peerValueExchange.ring;
 import java.util.Random;
 import java.util.Vector;
 
-import se.his.iit.it325g.common.AndrewsChan;
+import se.his.iit.it325g.common.AsynchronousChan;
 import se.his.iit.it325g.common.AndrewsProcess;
 import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
 import se.his.iit.it325g.common.Char;
 
 public class GlobalProgramState {
-	public static Vector<AndrewsChan<SmallestAndLargestValue>> values=new Vector<AndrewsChan<SmallestAndLargestValue>>();
+	public static Vector<AsynchronousChan<SmallestAndLargestValue>> values=new Vector<AsynchronousChan<SmallestAndLargestValue>>();
 	public static int numberOfPeers=10;
 	public static Random random=new Random(1);
 	public static void main(String argv[]) {
@@ -39,7 +39,7 @@ public class GlobalProgramState {
 		// initialize the channels
 
 		for (int i=0; i<GlobalProgramState.numberOfPeers; ++i) {
-			values.addElement(new AndrewsChan<SmallestAndLargestValue>());
+			values.addElement(new AsynchronousChan<SmallestAndLargestValue>());
 		}
 		// note that the ordering of the specification is critical
 		// since it maintains implicit assumptions in the program

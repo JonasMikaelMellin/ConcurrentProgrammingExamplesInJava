@@ -19,12 +19,12 @@
 
 package se.his.iit.it325g.mergeSorter;
 
-import se.his.iit.it325g.common.AndrewsChan;
+import se.his.iit.it325g.common.Chan;
 
 public class Merge implements Runnable {
-	private AndrewsChan<Integer> in1;
-	private AndrewsChan<Integer> in2;
-	private AndrewsChan<Integer> out;
+	private Chan<Integer> in1;
+	private Chan<Integer> in2;
+	private Chan<Integer> out;
 	public Merge() {
 		this.in1=GlobalProgramState.in.get(0);
 		this.in2=GlobalProgramState.in.get(1);
