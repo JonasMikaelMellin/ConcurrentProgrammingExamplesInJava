@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
+import se.his.iit.it325g.common.rendezvous.Rendezvous;
+
 
 /**
  * @author melj
@@ -33,6 +35,7 @@ public class AndrewsProcess extends Thread {
 	private int andrewsPid;
 	private int relativeToTypeAndrewsPid;
 	private Class<?> cls;
+	private Runnable runnable;
 	
 	/**
 	 * 
@@ -140,7 +143,11 @@ public class AndrewsProcess extends Thread {
 		for (RunnableSpecification rs:runnableSpecification) {
 			for (int j=0; j<rs.getAmount(); ++j) {
 				final Class<? extends Runnable> cls=rs.getRunnableCls();
-				result[i++]=new AndrewsProcess(cls.newInstance());
+				result[i]=new AndrewsProcess(cls.newInstance());
+				if (result[i].getRunnable() instanceof Rendezvous) {
+					((Rendezvous)(result[i].getRunnable())).initialize();;
+				}
+				++i;
 			}
 		}
 		return result;
@@ -191,6 +198,7 @@ public class AndrewsProcess extends Thread {
 	public AndrewsProcess(Runnable target) {
 		super(target);
 		this.cls=target.getClass();
+		this.runnable=target;
 		this.initialize();
 		
 	}
@@ -257,6 +265,13 @@ public class AndrewsProcess extends Thread {
 		}
 		return result;
 	}
+	public static AndrewsProcess currentAndrewsProcess() {
+		final Thread t=Thread.currentThread();
+		if (!(t instanceof AndrewsProcess)) {
+			throw new IllegalStateException("The current thread is not and AndrewsProcess");
+		}
+		return (AndrewsProcess)t;
+	}
 	public static String licenseText() {
 		return "ConcurrentProgrammingExamplesInJava Copyright (C) 2017  Jonas Mikael Mellin\n"+
 				"This program comes with ABSOLUTELY NO WARRANTY; for details, \n"+
@@ -282,4 +297,13 @@ public class AndrewsProcess extends Thread {
 			difference=millis+initialMillis-System.currentTimeMillis();
 		}
 	}
+
+	/**
+	 * @return the runnable
+	 */
+	public synchronized final Runnable getRunnable() {
+		return runnable;
+	}
+	
+	
 }
