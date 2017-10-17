@@ -14,19 +14,21 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package se.his.iit.it325g.multipleProducerConsumerSingleBuffer;
+package se.his.iit.it325g.semaphores.multipleProducerConsumerSingleBuffer;
 
-public class Consumer implements Runnable {
+import se.his.iit.it325g.common.AndrewsProcess;
+
+public class Producer implements Runnable {
 
 
 	@Override
 	public void run() {
+		int i=1;
 		while(true) {
-			GlobalProgramState.full.acquireUninterruptibly();
-			int value=GlobalProgramState.buffer;
-			System.out.println("Consumer consumer value "+value);
-			GlobalProgramState.empty.release();
-
+			GlobalProgramState.empty.acquireUninterruptibly();
+			System.out.println(AndrewsProcess.currentAndrewsProcessId()+" producing "+i);
+			GlobalProgramState.buffer=i++;
+			GlobalProgramState.full.release();
 		}
 	}
 

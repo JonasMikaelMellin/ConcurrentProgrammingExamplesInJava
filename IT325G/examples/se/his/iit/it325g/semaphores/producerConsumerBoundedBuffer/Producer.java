@@ -14,7 +14,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package se.his.iit.it325g.producerConsumerBoundedBuffer;
+package se.his.iit.it325g.semaphores.producerConsumerBoundedBuffer;
 
 import java.util.Arrays;
 

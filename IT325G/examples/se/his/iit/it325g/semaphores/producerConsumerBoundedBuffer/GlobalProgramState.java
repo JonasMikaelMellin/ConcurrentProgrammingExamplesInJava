@@ -4,7 +4,7 @@
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
-//    any later version.
+//    (at your option) any later version.
 //
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14,7 +14,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package se.his.iit.it325g.multipleProducerConsumerBoundedBuffer;
+package se.his.iit.it325g.semaphores.producerConsumerBoundedBuffer;
 
 import java.util.concurrent.Semaphore;
 
@@ -28,14 +28,16 @@ public class GlobalProgramState {
 	public static int rear=0;
 	public static Semaphore empty=new Semaphore(n);
 	public static Semaphore full=new Semaphore(0);
+	public static Semaphore mutexD=new Semaphore(1);
+	public static Semaphore mutexF=new Semaphore(1);
 
 	public static void main(String argv[]) {
 		
 		System.out.print(AndrewsProcess.licenseText());
-		
+
 		RunnableSpecification rs[]=new RunnableSpecification[2];
-		rs[0]=new RunnableSpecification(Producer.class,1);
-		rs[1]=new RunnableSpecification(Consumer.class,1);
+		rs[0]=new RunnableSpecification(Producer.class,10);
+		rs[1]=new RunnableSpecification(Consumer.class,10);
 		try {
 			AndrewsProcess process[]=AndrewsProcess.andrewsProcessFactory(rs);
 			AndrewsProcess.startAndrewsProcesses(process);

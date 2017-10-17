@@ -14,21 +14,33 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package se.his.iit.it325g.multipleProducerConsumerSingleBuffer;
+package se.his.iit.it325g.semaphores.producerConsumerBoundedBuffer;
+
+import java.util.Arrays;
 
 import se.his.iit.it325g.common.AndrewsProcess;
 
-public class Producer implements Runnable {
+public class Consumer implements Runnable {
 
 
 	@Override
 	public void run() {
-		int i=1;
 		while(true) {
-			GlobalProgramState.empty.acquireUninterruptibly();
-			System.out.println(AndrewsProcess.currentAndrewsProcessId()+" producing "+i);
-			GlobalProgramState.buffer=i++;
-			GlobalProgramState.full.release();
+			GlobalProgramState.full.acquireUninterruptibly();
+			GlobalProgramState.mutexF.acquireUninterruptibly();
+			int value=GlobalProgramState.buffer[GlobalProgramState.front];
+			GlobalProgramState.front=(GlobalProgramState.front+1)%GlobalProgramState.n;
+			
+			System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+" consumes value "+value);
+			System.out.println("\tBuffer content: "+Arrays.toString(GlobalProgramState.buffer));
+			System.out.println("\tRear="+GlobalProgramState.rear+" front="+GlobalProgramState.front);
+			GlobalProgramState.mutexF.release();
+			GlobalProgramState.empty.release();
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+			}
+
 		}
 	}
 

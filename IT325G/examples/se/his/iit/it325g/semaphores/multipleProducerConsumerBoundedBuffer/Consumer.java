@@ -14,7 +14,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package se.his.iit.it325g.multipleProducerConsumerBoundedBuffer;
+package se.his.iit.it325g.semaphores.multipleProducerConsumerBoundedBuffer;
 
 public class Consumer implements Runnable {
 
