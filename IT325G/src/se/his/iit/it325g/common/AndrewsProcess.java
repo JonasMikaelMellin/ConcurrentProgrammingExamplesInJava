@@ -58,14 +58,14 @@ public class AndrewsProcess extends Thread {
 	/**
 	 * An Andrews process factory method that creates <code>n</code> Andrews processes (Java threads) based on
 	 * the Runnable class <code>runnable</code>
-	 * @param n number of Andrews processes to start
 	 * @param runnable the runnable class specification
+	 * @param n number of Andrews processes to start
 	 * @return an array of Andrews process identities
 	 * @throws InstantiationException @see {@link Thread#Thread(Runnable)})
 	 * @throws IllegalAccessException @see {@link Thread#Thread(Runnable)})
 	 */
 	
-	public static AndrewsProcess[] andrewsProcessFactory(int n, Class<? extends Runnable> runnable) throws InstantiationException, IllegalAccessException {
+	public static AndrewsProcess[] andrewsProcessFactory(Class<? extends Runnable> runnable, int n) throws InstantiationException, IllegalAccessException {
 		
 		AndrewsProcess[] result=new AndrewsProcess[n];
 		for (int i=0; i<n; ++i) {

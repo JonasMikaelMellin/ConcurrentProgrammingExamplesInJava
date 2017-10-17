@@ -31,7 +31,7 @@ public class GlobalProgramState {
 
 		AndrewsProcess[] process;
 		try {
-			process = AndrewsProcess.andrewsProcessFactory(n, NProcessBakeryAlgorithmRunnable.class);
+			process = AndrewsProcess.andrewsProcessFactory(NProcessBakeryAlgorithmRunnable.class, n);
 			AndrewsProcess.startAndrewsProcesses(process);
 		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
