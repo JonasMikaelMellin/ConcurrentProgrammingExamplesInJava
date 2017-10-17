@@ -14,7 +14,6 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 package se.his.iit.it325g.common;
 
 import java.util.LinkedList;
@@ -23,32 +22,34 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class SynchronousChan<T> extends Chan<T> {
 	private T value;
-	private boolean senderEntered=false,receiverEntered=false,senderExiting=false,receiverExiting=false;
-	private Queue<AndrewsProcess> waitingSenders=new LinkedList<AndrewsProcess>();
-	private Queue<AndrewsProcess> waitingReceivers=new LinkedList<AndrewsProcess>();
-
+	private boolean senderEntered = false, receiverEntered = false,
+			senderExiting = false, receiverExiting = false;
+	private Queue<AndrewsProcess> waitingSenders = new LinkedList<AndrewsProcess>();
+	private Queue<AndrewsProcess> waitingReceivers = new LinkedList<AndrewsProcess>();
 
 	public SynchronousChan() {
 	}
-	
 
 	@Override
 	public synchronized void send(T value) {
 		if (this.senderEntered) {
-			this.waitingSenders.add((AndrewsProcess)Thread.currentThread());
+			this.waitingSenders.add((AndrewsProcess) Thread.currentThread());
 		}
-		while (this.senderEntered || (!this.senderEntered && !((AndrewsProcess)Thread.currentThread()).equals(this.waitingSenders.peek()))) {
+		while (this.senderEntered
+				|| (!this.senderEntered && !((AndrewsProcess) Thread
+						.currentThread()).equals(this.waitingSenders.peek()))) {
 			try {
 				this.wait();
 			} catch (InterruptedException e) {
 
 			}
 		}
-		if (((AndrewsProcess)Thread.currentThread()).equals(this.waitingSenders.peek())) {
+		if (((AndrewsProcess) Thread.currentThread())
+				.equals(this.waitingSenders.peek())) {
 			this.waitingSenders.poll();
 		}
-		this.senderEntered=true;
-		this.value=value;
+		this.senderEntered = true;
+		this.value = value;
 		this.notifyAll();
 		while (!this.receiverEntered) {
 			try {
@@ -57,56 +58,59 @@ public class SynchronousChan<T> extends Chan<T> {
 
 			}
 		}
-		this.senderExiting=true;
+		this.senderExiting = true;
 		this.notifyAll();
-		while(!this.receiverExiting) {
+		while (!this.receiverExiting) {
 			try {
 				this.wait();
 			} catch (InterruptedException e) {
 
 			}
 		}
-		this.senderExiting=false;
-		this.senderEntered=false;
+		this.senderExiting = false;
+		this.senderEntered = false;
 		this.notifyAll();
 	}
+
 	@Override
 	public synchronized T receive() {
 
 		T result;
 		if (this.receiverEntered) {
-			this.waitingReceivers.add((AndrewsProcess)Thread.currentThread());
+			this.waitingReceivers.add((AndrewsProcess) Thread.currentThread());
 		}
-		while (this.receiverEntered || (!this.receiverEntered && !((AndrewsProcess)Thread.currentThread()).equals(this.waitingReceivers.peek()))) {
+		while (this.receiverEntered
+				|| (!this.receiverEntered && !((AndrewsProcess) Thread
+						.currentThread()).equals(this.waitingReceivers.peek()))) {
 			try {
 				this.wait();
 			} catch (InterruptedException e) {
 			}
 		}
-		if (((AndrewsProcess)Thread.currentThread()).equals(this.waitingReceivers.peek())) {
+		if (((AndrewsProcess) Thread.currentThread())
+				.equals(this.waitingReceivers.peek())) {
 			this.waitingReceivers.poll();
 		}
-		this.receiverEntered=true;
+		this.receiverEntered = true;
 		while (!this.senderEntered) {
 			try {
 				this.wait();
 			} catch (InterruptedException e) {
 			}
 		}
-		result=this.value;
-		this.receiverExiting=true;
+		result = this.value;
+		this.receiverExiting = true;
 		while (!this.senderExiting) {
 			try {
 				this.wait();
 			} catch (InterruptedException e) {
 			}
 		}
-		this.receiverExiting=false;
-		this.receiverEntered=false;
-		
+		this.receiverExiting = false;
+		this.receiverEntered = false;
+
 		this.notifyAll();
 		return result;
 	}
-	
 
 }

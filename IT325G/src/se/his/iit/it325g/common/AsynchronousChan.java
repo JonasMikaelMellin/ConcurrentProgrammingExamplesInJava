@@ -14,47 +14,46 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 package se.his.iit.it325g.common;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class AsynchronousChan<T> extends Chan<T> {
-	private LinkedBlockingQueue<T> queue=new LinkedBlockingQueue<T>();
+	private LinkedBlockingQueue<T> queue = new LinkedBlockingQueue<T>();
 
 	public AsynchronousChan() {
 	}
-	
+
 	@Override
 	public synchronized void send(T value) {
-		while(this.queue.remainingCapacity()<=0) {
-			try {
-				this.wait();
-			} catch (InterruptedException e) {
-				// hide interrupts				
-			}
-		}
-		
-		this.queue.add(value);
-		this.notifyAll();
-	}
-	@Override
-	public synchronized T receive() {
-		
-		// block until there is a result
-		
-		T result=this.queue.poll();
-		while (result==null) {
+		while (this.queue.remainingCapacity() <= 0) {
 			try {
 				this.wait();
 			} catch (InterruptedException e) {
 				// hide interrupts
 			}
-			result=this.queue.poll();
+		}
+
+		this.queue.add(value);
+		this.notifyAll();
+	}
+
+	@Override
+	public synchronized T receive() {
+
+		// block until there is a result
+
+		T result = this.queue.poll();
+		while (result == null) {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				// hide interrupts
+			}
+			result = this.queue.poll();
 		}
 		this.notifyAll();
 		return result;
 	}
-	
 
 }

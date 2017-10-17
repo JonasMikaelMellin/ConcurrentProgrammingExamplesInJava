@@ -14,33 +14,33 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 package se.his.iit.it325g.common;
 
 public class Char implements Comparable<Char> {
-	
+
 	private char value;
 
-
 	public Char(char ch) {
-		this.value=ch;
+		this.value = ch;
 	}
+
 	@Override
 	public int compareTo(Char o) {
-		return this.value-o.value;
+		return this.value - o.value;
 	}
+
 	public char getValue() {
 		return this.value;
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return String.format("%s", value);
 	}
-	
-	
-	
 
 }

@@ -6,8 +6,8 @@ public abstract class Chan<T> {
 		super();
 	}
 
-	public abstract  T receive();
+	public abstract T receive();
 
-	public abstract  void send(T value);
+	public abstract void send(T value);
 
 }
