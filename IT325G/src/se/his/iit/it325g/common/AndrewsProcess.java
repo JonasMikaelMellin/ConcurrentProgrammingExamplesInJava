@@ -163,8 +163,7 @@ public class AndrewsProcess extends Thread {
 	public static AndrewsProcess[] andrewsProcessFactory(
 			RunnableSpecification[] runnableSpecification)
 			throws InstantiationException, IllegalAccessException {
-		final int n = Arrays.asList(runnableSpecification).stream()
-				.mapToInt(rs -> rs.getAmount()).sum();
+		final int n = Arrays.asList(runnableSpecification).stream().mapToInt(r->r.getAmount()).sum();
 		AndrewsProcess result[] = new AndrewsProcess[n];
 		int i = 0;
 		for (RunnableSpecification rs : runnableSpecification) {
