@@ -23,8 +23,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import se.his.iit.it325g.common.rendezvous.Rendezvous;
 
 /**
- * @author melj
- *
+ * This class is a wrapper of the Tread class. The purpose is to make threads in Java conform to the process concept used
+ * in the course literature as much as possible as well as force students to employ the Runnable interface rather than extending
+ * the Thread class. The reason for the former is purely pedagogical. The reason of the latter is that employing the Runnable 
+ * interface does not restrict classes from, for example, being used in the java.lang.concurrent package. 
+ * @author Jonas Mellin
+ * @see Thread, Runnable
  */
 public class AndrewsProcess extends Thread {
 
@@ -36,10 +40,10 @@ public class AndrewsProcess extends Thread {
 																																									// respect
 																																									// to
 																																									// class
-	private int andrewsPid;
-	private int relativeToTypeAndrewsPid;
-	private Class<?> cls;
-	private Runnable runnable;
+	private int andrewsPid; // the global process identity within the program
+	private int relativeToTypeAndrewsPid; // process identity relative to type, to create arrays of a particular type
+	private Class<?> cls; // the type of the AndrewsProcess
+	private Runnable runnable; // the Runnable instance for this particular process
 
 	/**
 	 * 
@@ -70,9 +74,9 @@ public class AndrewsProcess extends Thread {
 	 *            number of Andrews processes to start
 	 * @return an array of Andrews process identities
 	 * @throws InstantiationException
-	 *             @see {@link Thread#Thread(Runnable)})
+	 *             @see Thread(Runnable) constructor
 	 * @throws IllegalAccessException
-	 *             @see {@link Thread#Thread(Runnable)})
+	 *             @see Thread(Runnable) constructor
 	 */
 
 	public static AndrewsProcess[] andrewsProcessFactory(
@@ -156,9 +160,9 @@ public class AndrewsProcess extends Thread {
 	 *            an array of RunnableSpecification
 	 * @return an array of Adrews process identities
 	 * @throws InstantiationException
-	 *             @see {@link Thread#Thread(Runnable)}
+	 *             @see Thread(Runnable) constructor
 	 * @throws IllegalAccessException
-	 *             @see {@link Thread#Thread(Runnable)}
+	 *             @see Thread(Runnable) constructor
 	 */
 	public static AndrewsProcess[] andrewsProcessFactory(
 			RunnableSpecification[] runnableSpecification)
@@ -187,7 +191,7 @@ public class AndrewsProcess extends Thread {
 	/**
 	 * Starts the processes in the array of Andrews processes.
 	 * 
-	 * @param process
+	 * @param process an array of AndrewsProcess objects.
 	 */
 	public static void startAndrewsProcesses(AndrewsProcess process[]) {
 		for (int i = 0; i < process.length; ++i) {
@@ -219,12 +223,21 @@ public class AndrewsProcess extends Thread {
 
 		this.relativeToTypeAndrewsPid = nextRelativeId;
 	}
+	/**
+	 * Always throws IllegalStateException to hinder students from extending this class and
+	 * enforce the use of Runnable interface.
+	 * @exception IllegalStateException 
+	 */
 
 	public AndrewsProcess() {
 		super();
 		throw new IllegalStateException(
 				"In the IT325G course, only threads based on Runnable are allowed");
 	}
+	/**
+	 * Invokes the super constructor and initializes the class.
+	 * @exception IllegalStateException see Thread
+	 */
 
 	public AndrewsProcess(Runnable target) {
 		super(target);
@@ -234,6 +247,11 @@ public class AndrewsProcess extends Thread {
 
 	}
 
+	/**
+	 * Always throws IllegalStateException to hinder students from extending this class and
+	 * enforce the use of Runnable interface.
+	 * @exception IllegalStateException 
+	 */
 	public AndrewsProcess(String name) {
 		super(name);
 		throw new IllegalStateException(
@@ -241,12 +259,22 @@ public class AndrewsProcess extends Thread {
 
 	}
 
+	/**
+	 * Invokes the super constructor and initializes the class.
+	 * @exception IllegalStateException see Thread
+	 */
 	public AndrewsProcess(ThreadGroup group, Runnable target) {
 		super(group, target);
+		this.cls = target.getClass();
+		this.runnable = target;
 		this.initialize();
 
 	}
 
+	/**
+	 * Invokes the super constructor and initializes the class.
+	 * @exception IllegalStateException see Thread
+	 */
 	public AndrewsProcess(ThreadGroup group, String name) {
 		super(group, name);
 		throw new IllegalStateException(
@@ -254,25 +282,47 @@ public class AndrewsProcess extends Thread {
 
 	}
 
+	/**
+	 * Invokes the super constructor and initializes the class.
+	 * @exception IllegalStateException see Thread
+	 */
 	public AndrewsProcess(Runnable target, String name) {
 		super(target, name);
-		this.andrewsPid = nextAndrewsPid();
-
-	}
-
-	public AndrewsProcess(ThreadGroup group, Runnable target, String name) {
-		super(group, target, name);
+		this.cls = target.getClass();
+		this.runnable = target;
 		this.initialize();
 
 	}
 
+	/**
+	 * Invokes the super constructor and initializes the class.
+	 * @exception IllegalStateException see Thread
+	 */
+	public AndrewsProcess(ThreadGroup group, Runnable target, String name) {
+		super(group, target, name);
+		this.cls = target.getClass();
+		this.runnable = target;
+		this.initialize();
+
+	}
+
+	/**
+	 * Invokes the super constructor and initializes the class.
+	 * @exception IllegalStateException see Thread
+	 */
 	public AndrewsProcess(ThreadGroup group, Runnable target, String name,
 			long stackSize) {
 		super(group, target, name, stackSize);
+		this.cls = target.getClass();
+		this.runnable = target;
 		this.initialize();
 
 	}
 
+	/**
+	 * 
+	 * @return Current global process identity within program scope.
+	 */
 	public static int currentAndrewsProcessId() {
 		if (Thread.currentThread() == null) {
 			throw new IllegalStateException(
@@ -328,6 +378,11 @@ public class AndrewsProcess extends Thread {
 		}
 		return (AndrewsProcess) t;
 	}
+	
+	/**
+	 * 
+	 * @return Returns the license text.
+	 */
 
 	public static String licenseText() {
 		return "ConcurrentProgrammingExamplesInJava Copyright (C) 2017  Jonas Mikael Mellin\n"
@@ -338,7 +393,7 @@ public class AndrewsProcess extends Thread {
 	}
 
 	/**
-	 * Hides away the interrupt exception and sleeps for the specified amount
+	 * Hides away the interrupt exception and sleeps (at least) for the specified amount
 	 * time.
 	 * 
 	 * @param millis
