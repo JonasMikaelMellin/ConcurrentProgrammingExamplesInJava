@@ -1,4 +1,4 @@
-package se.his.iit.it325g.semaphores.diningPhilosphers;
+package se.his.iit.it325g.examples.semaphores.diningPhilosphers;
 
 import java.util.Random;
 
