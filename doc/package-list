@@ -1,6 +1,7 @@
 se.his.iit.it325g.allocatorClientServer
 se.his.iit.it325g.common
 se.his.iit.it325g.common.rendezvous
+se.his.iit.it325g.examples.semaphores.diningPhilosphers
 se.his.iit.it325g.filterProcessAssemblingLinesOfCharacters
 se.his.iit.it325g.mergeSorter
 se.his.iit.it325g.nProcessBakeryAlgorithm
@@ -11,9 +12,9 @@ se.his.iit.it325g.peerValueExchange.ring
 se.his.iit.it325g.peerValueExchange.symmetric
 se.his.iit.it325g.rendezvous.criticalSection
 se.his.iit.it325g.rendezvous.diningPhilosophers
-se.his.iit.it325g.semaphores.diningPhilosphers
 se.his.iit.it325g.semaphores.multipleProducerConsumerBoundedBuffer
 se.his.iit.it325g.semaphores.multipleProducerConsumerSingleBuffer
 se.his.iit.it325g.semaphores.producerConsumerBoundedBuffer
 se.his.iit.it325g.simpleClientServer
 se.his.iit.it325g.twoProcessTieBreaker
+se.his.se.it325g.examples.semaphores.passingTheBaton.readersWriters
