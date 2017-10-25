@@ -40,18 +40,13 @@ public class NProcessTieBreakerRunnable implements Runnable {
 				for (int k=0; k<GlobalProgramState.in.length; ++k) { 
 					if (k==AndrewsProcess.currentAndrewsProcessId()) continue;
 					while (GlobalProgramState.in[k]>=GlobalProgramState.in[AndrewsProcess.currentAndrewsProcessId()] && GlobalProgramState.last[j]==AndrewsProcess.currentAndrewsProcessId()) {
-						try {
-							Thread.sleep(500);
-						} catch (InterruptedException e) {
-						}
+						AndrewsProcess.uninterruptibleMinimumDelay(500);
 					}
 				}
 			}
 			System.out.println("Thread "+AndrewsProcess.currentAndrewsProcessId()+" is in critical section");
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-			}
+			AndrewsProcess.uninterruptibleMinimumDelay(500);
+
 			GlobalProgramState.in[AndrewsProcess.currentAndrewsProcessId()]=0;
 			System.out.println("Thread "+AndrewsProcess.currentAndrewsProcessId()+" is not in critical section");
 		}

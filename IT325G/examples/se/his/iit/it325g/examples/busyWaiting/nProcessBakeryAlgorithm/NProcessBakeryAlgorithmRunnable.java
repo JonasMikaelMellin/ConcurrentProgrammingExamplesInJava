@@ -43,27 +43,18 @@ public class NProcessBakeryAlgorithmRunnable implements Runnable {
 			System.out.println("Thread "+i+" is at stage "+GlobalProgramState.turn[i]);
 			for (int j=0; j<GlobalProgramState.turn.length; ++j) { 
 				if (j==i) continue;
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException e1) {
-				}
+				AndrewsProcess.uninterruptibleMinimumDelay(10);
+
 				while (GlobalProgramState.turn[j]!=-1 && (GlobalProgramState.turn[i]>GlobalProgramState.turn[j] ||(GlobalProgramState.turn[i]==GlobalProgramState.turn[j])&& i>j)) {
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-					}
+					AndrewsProcess.uninterruptibleMinimumDelay(10);
 				}
 			}
 			System.out.println("Thread "+AndrewsProcess.currentAndrewsProcessId()+" is in critical section");
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-			}
+			
+			AndrewsProcess.uninterruptibleMinimumDelay(10);
 			GlobalProgramState.turn[i]=-1;
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-			}
+
+			AndrewsProcess.uninterruptibleMinimumDelay(10);
 			System.out.println("Thread "+AndrewsProcess.currentAndrewsProcessId()+" is not in critical section");
 		}
 	}

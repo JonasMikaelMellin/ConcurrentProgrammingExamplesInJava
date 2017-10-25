@@ -37,11 +37,8 @@ public class TwoProcessTieBreakerRunnable2 implements Runnable {
 			GlobalProgramState.last=2;
 			System.out.println("Thread "+AndrewsProcess.currentAndrewsProcessId()+" is waiting to access critical section");
 			while (GlobalProgramState.in1 && GlobalProgramState.last==2) {
-				try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				AndrewsProcess.uninterruptibleMinimumDelay(10);
+
 			}
 			System.out.println("Thread "+AndrewsProcess.currentAndrewsProcessId()+" is in critical section");
 			GlobalProgramState.in2=false;
