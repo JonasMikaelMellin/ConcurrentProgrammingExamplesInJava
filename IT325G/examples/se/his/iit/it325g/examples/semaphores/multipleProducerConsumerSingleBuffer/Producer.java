@@ -26,7 +26,7 @@ public class Producer implements Runnable {
 		int i=1;
 		while(true) {
 			GlobalProgramState.empty.acquireUninterruptibly();
-			System.out.println(AndrewsProcess.currentAndrewsProcessId()+" producing "+i);
+			System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+" producing "+i);
 			GlobalProgramState.buffer=i++;
 			GlobalProgramState.full.release();
 		}

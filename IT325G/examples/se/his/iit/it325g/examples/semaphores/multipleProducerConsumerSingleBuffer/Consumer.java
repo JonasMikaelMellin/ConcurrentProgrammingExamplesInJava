@@ -16,6 +16,8 @@
 
 package se.his.iit.it325g.examples.semaphores.multipleProducerConsumerSingleBuffer;
 
+import se.his.iit.it325g.common.AndrewsProcess;
+
 public class Consumer implements Runnable {
 
 
@@ -24,7 +26,7 @@ public class Consumer implements Runnable {
 		while(true) {
 			GlobalProgramState.full.acquireUninterruptibly();
 			int value=GlobalProgramState.buffer;
-			System.out.println("Consumer consumer value "+value);
+			System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+": consuming value "+value);
 			GlobalProgramState.empty.release();
 
 		}

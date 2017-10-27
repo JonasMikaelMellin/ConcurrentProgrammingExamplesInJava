@@ -4,7 +4,7 @@
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
-//    any later version.
+//    (at your option) any later version.
 //
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14,22 +14,20 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package se.his.iit.it325g.examples.messagePassing.simpleClientServer;
+package se.his.iit.it325g.examples.monitors.multipleProducerConsumerSingleBuffer;
 
-public class ClientRequestAddValue extends ClientRequestArithmeticOperator {
+import se.his.iit.it325g.common.AndrewsProcess;
 
-	public ClientRequestAddValue(int clientId, int value) {
-		super(clientId, value);
-	}
+public class Producer implements Runnable {
 
-	@Override
-	public int performOperation(int value) {
-		return value+this.getRequestValue();
-	}
 
 	@Override
-	public Operation getOperation() {
-		return Operation.add;
+	public void run() {
+		int i=1;
+		while(true) {
+			System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+" producing "+i);
+			GlobalProgramState.buffer.produce(i++);
+		}
 	}
 
 }

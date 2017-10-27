@@ -1,0 +1,254 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+% This is a simple template for a LaTeX document using the "article" class.
+% See "book", "report", "letter" for other types of document.
+
+\documentclass[11pt]{article} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+%%% Examples of Article customizations
+% These packages are optional, depending whether you want the features they provide.
+% See the LaTeX Companion or other references for full information.
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+% \geometry{margin=2in} % for example, change the margins to 2 inches all round
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\usepackage{graphicx} % support the \includegraphics command and options
+
+% \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+% These packages are all incorporated in the memoir class to one degree or another...
+\usepackage{listings}
+\usepackage{color}
+
+%%% Listings
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ 
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+% (This matches ConTeXt defaults)
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+%%% END Article customizations
+
+%%% The "real" document content comes below...
+
+\title{A Java Library for Concurrent Programming at Novice/Advanced Beginner Level}
+\author{Jonas Mellin}
+%\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+The purpose of this document is to describe the Java API for concurrent programming at novice/advanced beginner level. It is not intended for building real applications, since exception handling is avoided. That is, exceptions are only used for terminating the program when development faults occur, not general handling\footnote{For example, recovering from an exception} of exceptions based on operational faults derived from the underlying system or other systems. Further, the interfaces are limited to enforce certain design principles as well as reduce the risk for misunderstandings. Finally, the API is meant to be used in situations where we employ formal methods tools to prove the correctness and avoiding the exceptions simplifies the proofs.
+
+The Java API is inspired by the SR programming language, a pedagogical language and concurrent programming language for concurrent programming. In most cases, there are one-to-one mapping between constructs in SR and in the Java API. 
+
+
+
+\section{An Example Program}
+
+The busy-wait solution for a two-process tiebreaker algorithm is found in figure~\ref{fig:tieBreakerProcess1} and in figure~\ref{fig:tieBreakerProcess2}. First, this is an implementation of the interface Runnable in Java, which is used to specify the code of a thread. When a thread is created, an instance of a Runnable object can be passed as an argument. When the thread is started, the method \emph{ run()} is executed until termination. In this example, the processes does not terminate. At line 1, the specification "implements Runnable" means that objects of the class TwoProcessTieBreakerRunnable1 can be treated as a Runnable objects and are required to define the \emph{ run()} method. At line 4-5, the \emph{ run()} method is declared; the keyword \emph{@Override} means that this overrides the default declaration in the Runnable interface and the \emph{public  void {\bfseries run()}} means that the {\bfseries run()} method is defined as open for access to all other objects and that it does not return any value. 
+
+In Java, there is no global variables. Instead, static member variables of a class are used. In all examples in this document, there is a class named {\bfseries GlobalProgramState} that contains all global variables (i.e., accessible by all processes in a program) as public static member variables (as defined in lines 3-5 in figure~\ref{fig:tieBreakerGPS}). To access the global variables, prefix the variable with the class name {\bfseries GlobalProgramState} as in line 7 and 8.
+
+On line 10-12, the busy wait loop of the two process tie breaker are found. Process 1 continues to iterate as long as the global variable {\bfseries in2} is true and {\bfseries last} is equivalent to 1. On line 11, how to make a process sleep for a minimum delay is called. 
+
+The singleton class {\bfseries GlobalProgramState} contains the global variables as well as the {\bfseries main(String \emph{argv}[])} code that is the entry point for starting the whole application. Essentially, the {\bfseries main} method is employed to start all the processes. To make this process as convenient as possible as well as ensure that there is a close relationship to the SR examples, the creation and starting of processes are provided by non-standard methods in the {\bfseries AndrewsProcess} class. On line 15-16, the start specification of the tie breaker processes are declared: one of each. On line 17, the processes are actually created and an array of {\bfseries AndrewsProcess} objects are returned. This array can be passed to the method {\bfseries startAndrewsProcesses} on line 18. If there are any kind of development faults that puts the program into an erroneous state, then this is caught by the catch clause on line 19 and the action is to print  a stack trace (on line 20) to support localization of the fault
+
+
+
+\lstset{inputpath=c:/git/IT325G/IT325G/examples/se/his/iit/it325g/examples/busyWaiting/twoProcessTieBreaker}
+\begin{figure}
+\lstinputlisting[language=Java,linerange={30-52}]{TwoProcessTieBreakerRunnable1.java}
+\caption{Main code of Tie Breaker process 1 in Java}
+\label{fig:tieBreakerProcess1}
+\end{figure}
+
+\begin{figure}
+\lstinputlisting[language=Java,linerange={30-52}]{TwoProcessTieBreakerRunnable2.java}
+\caption{Main code of Tie Breaker process 2 in Java}
+\label{fig:tieBreakerProcess2}
+\end{figure}
+
+\begin{figure}
+\lstinputlisting[language=Java,linerange={22-45}]{GlobalProgramState.java}
+\caption{Main code of GlobalProgramState in TieBreaker for two processes}
+\label{fig:tieBreakerGPS}
+\end{figure}
+
+
+\section{General Design Guidelines for the Concurrent Programming Course}
+\begin{enumerate}
+\item Create a class named {\bfseries GlobalProgramState} that contains the global variables as well as the {\bfseries main} method. The {\bfseries main} method should start all the processes.
+\item Create a class that implements the {\bfseries Runnable} interface for each kind of process.
+\item Implement the {\bfseries run()} method with the code. Do not used the constructor to initialize fields that depends on that the process actually exists. An instance of the {\bfseries Runnable} is created for each process before the process is created and started. A simple solution is to make all initializations in the beginning of the {\bfseries run()} method. 
+\end{enumerate}
+
+\section{Shared Variable Mechanisms}
+
+The API employ standard Java API for shared variable mechanisms with recommendations for what methods that should be employed. Java, by default, support monitors with signal and continue policy on the signal and wait synchronization on condition variables. Condition variables are associated with the objects of a class, essentially, signal and wait are sent to the object containing the data instead of a separate condition variable. 
+
+In addition, in the package {\bfseries java.lang.concurrent}, numerous synchronization and communication mechanisms are available. In the course, only semaphores will be employed directly and only a limited set of the semaphore functionality is allowed. 
+
+\subsection{Semaphores}
+\label{sec:semaphores}
+
+The semaphores in Java are defined in {\bfseries java.lang.concurrent.semaphore} and it provide more functionality than P and V in the book. Essentially, there are numerous varieties of the methods that have a similar semantics as the P operation (e.g., 
+{\bfseries acquire}, {\bfseries acquireUninterrupibly()}, {\bfseries acquire(int permin)}, {\bfseries tryAcquire()}). Out of these, the {\bfseries acquireUninterrupibly()} is the method that have the same semantics as the P operation in SR and is the method that should be used in the course. The V operation is only represented by the {\bfseries release()} method. In Java, \emph{P(empty)} is the same as \emph{empty.acquireUniterruptibly()} and \emph{V(empty)} is the same as \emph{empty.release()}.
+
+In figure~\ref{fig:pcsbgps}, the {\bfseries GlobalProgramState} of the producer/consumer based on a single buffer is illustrated. There are three global variables: \emph{buffer}, the buffer for communicating values of type int (in this example) between the producer and the consumer processes; \emph{empty}, the semaphore that is used to synchronize producers so that they do not write unless there is space and only a single producer at the same time can be in the critical section; \emph{full}, the semaphore that is used to synchronize consumers so that they only can consume when there is  a value in the buffer. In Java, the initialization is done by allocation an object of the class {\bfseries Semaphore} with the initial value of the semaphore as the initialization value. 
+
+On line 11 and 12, 10 producer processes and 20 consumer processes are cleclared. A {\bfseries Producer} is a {\bfseries Runnable} implementing an example of a producer semantics and {\bfseries Consumer} is a {\bfseries Runnable} implementing an example of a consumer semantics. Similarly to figure~\ref{fig:tieBreakerGPS}, the array of {\bfseries RunnableSpecification} is passed to the factory resulting in an array of {\bfseries AndrewsProcess} objects, which are then started. 
+
+\lstset{inputpath=c:/git/IT325G/IT325G/examples/se/his/iit/it325g/examples/semaphores/multipleProducerConsumerSingleBuffer}
+\begin{figure}[h]
+\lstinputlisting[language=Java,linerange=24-46]{GlobalProgramState.java}
+\caption{GlobalProgramState of Producer/Consumer with a single buffer}
+\label{fig:pcsbgps}
+\end{figure}
+
+The producer process (in figure~\ref{fig:pcsbproc}), defined as a {\bfseries Runnable}, in the class {\bfseries Producer}, implements an example of a producer behavior. On line 8, the \emph{ empty} semaphore is acquired uninterrupibly\footnote{That is, it is not terminated by an exception}; if the $\textit{empty}>0$ the process acquires the semaphore and can pass, otherwise the process is blocked on the semaphore until another process releases the semaphore. In line 10, the buffer is assigned to a value and the local counter $i$ is increased. After this, on line 11, the \emph{full} semaphore is released.
+
+\begin{figure}[h]
+\lstinputlisting[language=Java,linerange=21-35]{Producer.java}
+\caption{Producer example definition of Producer/Consumer with a single buffer}
+\label{fig:pcsbproc}
+\end{figure}
+
+Correspondingly, the consumer process (in figure~\ref{fig:pcsbcons}), defined as a {\bfseries Runnable} too, in the class {\bfseries Consumer}, implements an example of consumer behavior. In this case, on line 7 the \emph{full} semaphore is acquired, the value is consumed from the buffer on line 9, and on line 10 the \emph{empty} semaphore is released. 
+
+\begin{figure}[h]
+\lstinputlisting[language=Java,linerange=19-35]{Consumer.java}
+\caption{Consumer example definition of Producer/Consumer with a single buffer}
+\label{fig:pcsbcons}
+\end{figure}
+
+\subsection{Monitors}
+
+As mentioned, Java's default communication and synchronization mechanism is monitors. Each object of a class is a monitor if the class is defined in the correct way. The keyword in Java is {\bfseries synchronized}, which can be used on method level as well as inside methods on member attributes. In this document, only the former is addressed since it most closely match the semantics of a monitor as expressed by Andrews \cite[ch. 5]{andrews_foundations_2000}. 
+
+\lstset{inputpath=c:/git/IT325G/IT325G/examples/se/his/iit/it325g/examples/monitors/multipleProducerConsumerSingleBuffer}
+\begin{figure}[ht]
+\lstinputlisting[language=Java,linerange=20-54]{SingleBufferMonitor.java}
+\caption{SingleBufferMonitor of Producer/Consumer with a single buffer, based on monitors}
+\label{fig:pcsbsbm-monitor}
+\end{figure}
+
+The example used in section~\ref{sec:semaphores} based on producer/consumer is employed to illustrate monitors in Java. First, a class for defining the monitor behavior is required (see figure~\ref{fig:pcsbsbm-monitor}). There are two methods, \emph{produce(int value)} and \emph{consume()} that places a value in the buffer and consumes a value respectively. The \emph{buffer} is defined on line 2 (cf. line 2 in figure~\ref{fig:pcsbgps}), but, in contrast to lines 3-4 in figure~\ref{fig:pcsgbp} defining the semaphores, it is only necessary to have a boolean variables \emph{full} on line 3 to check if the \emph{buffer} is full or not. 
+
+On line 8-19, the \emph{produce(int value)} is defined. Note the {\bfseries synchronized} keyword which implies that the method is called in accordance to the signal and continue semantics. Essentially, it first checks if the buffer is full on line 9-15. The reason for the while-construct instead of an if statement is that this idiom is more robust. The reason is that it more robust to use \emph{notifyAll()} rather than \emph{notify()}, which leads to that all processes waiting in the monitor will be woken up. Each process test their condition and if, and only if, \emph{full} is false will it exit the loop and continue. The signal and continue semantics implies that a process is in the monitor until it either exits the method or it calls \emph{wait()} on an object. On line 16, the buffer is assigned a value, on line 17 the \emph{full} flag is set to true and then \emph{notifyAll()} is called on itself. 
+
+On line 21-33, the \emph{consume()} method is defined. It is similar to the \emph{produce(int value)} method. Note that the ordering on line 30-32 only works since the monitor follows a signal and continue semantics. If it would follow signal and wait, then the value of the buffer must be placed in a  local process variable before calling \emph{notifyAll()} and the return statement must return the copy of the buffer rather than the buffer itself, since the buffer value might have changed. 
+
+
+
+\begin{figure}[ht]
+\lstinputlisting[language=Java,linerange=23-46]{GlobalProgramState.java}
+\caption{GlobalProgramState of Producer/Consumer with a single buffer, based on monitors}
+\label{fig:pcsbgps-monitor}
+\end{figure}
+
+The declaration of a singleton object for the singleton monitor is found at line 2 in figure~\ref{fig:pcsbgps-monitor}. This replaces line 2-5 in figure~\ref{fig:pcsbgps}. The keyword {\bfseries static} guarantees that one, and only one, object of this kind is assigned to the variable \emph{buffer}. Apart from this, the example in figure~\ref{fig:pcsbgps} is similar to figure~\ref{fig:pcsbgps-monitor}.
+
+\begin{figure}[ht]
+\lstinputlisting[language=Java,linerange=21-46]{Producer.java}
+\caption{Producer of Producer/Consumer with a single buffer, based on monitors}
+\label{fig:pcsbproc-monitor}
+\end{figure}
+
+\begin{figure}[ht]
+\lstinputlisting[language=Java,linerange=21-46]{Consumer.java}
+\caption{Consumer of Producer/Consumer with a single buffer, based on monitors}
+\label{fig:pcsbproc-monitor}
+\end{figure}
+
+In figure~\ref{fig:pcsbproc-monitor}, the producer is defined. This is less error-prone compared to the semaphore-based solution in figure~\ref{fig:pcsbproc}. In figure~\ref{fig:pcsbcons-monitor}, the consumer is defined. 
+
+\section{Mechanisms based on Message Passing}
+
+In message passing, an abstract class {\bfseries Chan} has been defined. This class essentially supports two methods: \emph{send(value)} and \emph{receive(value). There are two kinds of channels: {\bfseries AsynchronousChan} and {\bfseriers SynchronousChan}.
+
+\subsection{Asynchronous Message Passing}
+
+\subsection{Synchronous Message Passing}
+
+\subsection{Rendezvous}
+
+\section{Application Programming Interfaces}
+
+\subsection{AndrewsProcess class}
+
+\subsection{Chan class}
+
+\section{How To Guide}
+
+\subsection{Define a Process}
+
+\subsection{Start a Process}
+
+\subsection{Keep Track of Data Concerning a Process}
+
+\subsection{Synchronize Processes}
+
+\subsection{Communicate between Processes}
+
+\subsection{Initialize a Program}
+
+\subsection{Terminate a Program}
+
+\bibliographystyle{apalike}
+\bibliography{references}
+
+\end{document}
