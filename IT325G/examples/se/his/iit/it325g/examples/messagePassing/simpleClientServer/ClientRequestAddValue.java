@@ -29,7 +29,7 @@ public class ClientRequestAddValue extends ClientRequestArithmeticOperator {
 
 	@Override
 	public Operation getOperation() {
-		return Operation.add;
+		return Operation.ADD;
 	}
 
 }

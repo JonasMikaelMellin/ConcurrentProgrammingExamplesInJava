@@ -30,7 +30,7 @@ public class ClientRequestSubtractValue extends ClientRequestArithmeticOperator 
 
 	@Override
 	public Operation getOperation() {
-		return Operation.subtract;
+		return Operation.SUBTRACT;
 	}
 
 }

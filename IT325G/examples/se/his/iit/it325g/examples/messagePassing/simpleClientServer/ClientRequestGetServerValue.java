@@ -31,7 +31,7 @@ public class ClientRequestGetServerValue extends ClientRequest {
 
 	@Override
 	public Operation getOperation() {
-		return Operation.getServerValue;
+		return Operation.GET_SERVER_VALUE;
 	}
 
 }

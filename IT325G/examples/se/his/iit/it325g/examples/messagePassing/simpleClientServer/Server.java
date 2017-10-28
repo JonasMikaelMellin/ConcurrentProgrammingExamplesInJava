@@ -32,7 +32,7 @@ public class Server implements Runnable {
 			final ClientRequest clientRequest=GlobalProgramState.request.receive();
 			ServerResponse serverResponse=null;
 			switch(clientRequest.getOperation()) {
-			case add: case subtract:
+			case ADD: case SUBTRACT:
 				try {
 					this.serverValue=((ClientRequestArithmeticOperator)clientRequest).performOperation(this.serverValue);
 					serverResponse=new ServerResponse(true);
@@ -41,7 +41,7 @@ public class Server implements Runnable {
 					serverResponse=new ServerResponse(e);
 				}
 				break;
-			case getServerValue:
+			case GET_SERVER_VALUE:
 				try {
 					serverResponse=new ServerResponseWithValue(this.serverValue);
 				}
@@ -49,7 +49,7 @@ public class Server implements Runnable {
 					serverResponse=new ServerResponse(e);
 				}
 				break;
-			case closeSession:
+			case CLOSE_SESSION:
 				--this.numberOfSessions;
 				serverResponse=new ServerResponse(true);
 				break;
