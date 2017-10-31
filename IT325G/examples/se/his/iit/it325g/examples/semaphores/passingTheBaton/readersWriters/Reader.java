@@ -20,13 +20,13 @@ public class Reader implements Runnable {
 		
 		for (int i=0; i<GlobalProgramState.numberOfIterations; ++i) {
 			System.out.println("Reader "+AndrewsProcess.currentAndrewsProcessId()+" trying to enter critical section");
-			GlobalProgramState.entry.acquireUninterruptibly();
+			GlobalProgramState.entry.P();
 			System.out.println("Reader "+AndrewsProcess.currentAndrewsProcessId()+" trying to enter critical section, state: "+GlobalProgramState.getState());
 			if (GlobalProgramState.numberOfWriters>0) {
 				++GlobalProgramState.numberOfDelayedReaders;
 				System.out.println("Reader "+AndrewsProcess.currentAndrewsProcessId()+" delayed");
-				GlobalProgramState.entry.release();
-				GlobalProgramState.delayedReader.acquireUninterruptibly();
+				GlobalProgramState.entry.V();
+				GlobalProgramState.delayedReader.P();
 				System.out.println("Reader "+AndrewsProcess.currentAndrewsProcessId()+" released, state: "+GlobalProgramState.getState());
 
 			}
@@ -38,7 +38,7 @@ public class Reader implements Runnable {
 			AndrewsProcess.uninterruptibleMinimumDelay(Math.abs(r.nextInt(1000)));
 			
 			System.out.println("Reader "+AndrewsProcess.currentAndrewsProcessId()+" exiting critical section, state: "+GlobalProgramState.getState());
-			GlobalProgramState.entry.acquireUninterruptibly();
+			GlobalProgramState.entry.P();
 			--GlobalProgramState.numberOfReaders;
 			GlobalProgramState.signal();
 			System.out.println("Reader "+AndrewsProcess.currentAndrewsProcessId()+" exited");

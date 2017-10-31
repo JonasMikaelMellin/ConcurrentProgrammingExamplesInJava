@@ -16,14 +16,14 @@
 
 package se.his.iit.it325g.examples.semaphores.diningPhilosphers;
 
-import java.util.concurrent.Semaphore;
 
 import se.his.iit.it325g.common.AndrewsProcess;
 import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
+import se.his.iit.it325g.common.AndrewsSemaphore;
 
 public class GlobalProgramState {
 	
-	static Semaphore fork[]=new Semaphore[5];
+	static AndrewsSemaphore fork[]=new AndrewsSemaphore[5];
 
 
 	public static void main(String argv[]) {
@@ -31,7 +31,7 @@ public class GlobalProgramState {
 		System.out.print(AndrewsProcess.licenseText());
 		
 		for (int i=0; i<GlobalProgramState.fork.length; ++i) {
-			fork[i]=new Semaphore(1);
+			fork[i]=new AndrewsSemaphore(1);
 		}
 
 		RunnableSpecification rs[]=new RunnableSpecification[2];

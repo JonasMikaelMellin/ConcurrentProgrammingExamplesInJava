@@ -24,10 +24,10 @@ public class Consumer implements Runnable {
 	@Override
 	public void run() {
 		while(true) {
-			GlobalProgramState.full.acquireUninterruptibly();
+			GlobalProgramState.full.P();
 			int value=GlobalProgramState.buffer;
 			System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+": consuming value "+value);
-			GlobalProgramState.empty.release();
+			GlobalProgramState.empty.V();
 
 		}
 	}

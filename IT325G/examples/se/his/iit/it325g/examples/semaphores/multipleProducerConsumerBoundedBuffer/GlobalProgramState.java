@@ -16,18 +16,18 @@
 
 package se.his.iit.it325g.examples.semaphores.multipleProducerConsumerBoundedBuffer;
 
-import java.util.concurrent.Semaphore;
 
 import se.his.iit.it325g.common.AndrewsProcess;
 import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
+import se.his.iit.it325g.common.AndrewsSemaphore;
 
 public class GlobalProgramState {
 	public static int n=10;
 	public static int buffer[]=new int[n];
 	public static int front=0;
 	public static int rear=0;
-	public static Semaphore empty=new Semaphore(n);
-	public static Semaphore full=new Semaphore(0);
+	public static AndrewsSemaphore empty=new AndrewsSemaphore(n);
+	public static AndrewsSemaphore full=new AndrewsSemaphore(0);
 
 	public static void main(String argv[]) {
 		

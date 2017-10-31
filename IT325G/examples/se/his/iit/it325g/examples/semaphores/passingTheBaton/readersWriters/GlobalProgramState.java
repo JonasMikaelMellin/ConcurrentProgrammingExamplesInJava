@@ -16,10 +16,10 @@
 
 package se.his.iit.it325g.examples.semaphores.passingTheBaton.readersWriters;
 
-import java.util.concurrent.Semaphore;
 
 import se.his.iit.it325g.common.AndrewsProcess;
 import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
+import se.his.iit.it325g.common.AndrewsSemaphore;
 
 /** 
  * Global program state for readers/writers based on passing the baton technique. 
@@ -32,9 +32,9 @@ import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
  */
 
 public class GlobalProgramState {
-	public static Semaphore entry = new Semaphore(1);
-	public static Semaphore delayedReader = new Semaphore(0);
-	public static Semaphore delayedWriter = new Semaphore(0);
+	public static AndrewsSemaphore entry = new AndrewsSemaphore(1);
+	public static AndrewsSemaphore delayedReader = new AndrewsSemaphore(0);
+	public static AndrewsSemaphore delayedWriter = new AndrewsSemaphore(0);
 	
 	public static int numberOfWriters=0;
 	public static int numberOfReaders=0;
@@ -52,12 +52,12 @@ public class GlobalProgramState {
 	public static void signal() {
 		if (numberOfWriters == 0 && numberOfDelayedReaders>0) {
 			--numberOfDelayedReaders;
-			delayedReader.release();
+			delayedReader.V();
 		} else if ( numberOfReaders == 0 && numberOfWriters == 0 && numberOfDelayedWriters>0) {
 			--numberOfDelayedWriters;
-			delayedWriter.release();
+			delayedWriter.V();
 		} else {
-			entry.release();
+			entry.V();
 		}
 	}
 	

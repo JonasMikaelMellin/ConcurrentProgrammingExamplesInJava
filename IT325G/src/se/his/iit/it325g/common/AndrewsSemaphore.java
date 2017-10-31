@@ -4,7 +4,7 @@
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
+//    any later version.
 //
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14,24 +14,32 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package se.his.iit.it325g.examples.semaphores.multipleProducerConsumerBoundedBuffer;
 
-import se.his.iit.it325g.common.AndrewsProcess;
+package se.his.iit.it325g.common;
 
-public class Consumer implements Runnable {
+import java.util.concurrent.Semaphore;
 
+public class AndrewsSemaphore {
+	
+	private Semaphore semaphore;
 
-	@Override
-	public void run() {
-		while(true) {
-			GlobalProgramState.full.P();
-			int value=GlobalProgramState.buffer[GlobalProgramState.front];
-			GlobalProgramState.front=(GlobalProgramState.front+1)%GlobalProgramState.n;
-			System.out.println("Consumer consumer value "+value);
-			GlobalProgramState.empty.V();
-			AndrewsProcess.uninterruptibleMinimumDelay(1000);
-
-		}
+	public AndrewsSemaphore(int value) {
+		this.semaphore = new Semaphore(value);
 	}
+	
+	/**
+	 * The P operation
+	 */
+	public void P() {
+		this.semaphore.acquireUninterruptibly();
+	}
+	
+	/**
+	 * The V operation
+	 */
+	public void V() {
+		this.semaphore.release();
+	}
+
 
 }

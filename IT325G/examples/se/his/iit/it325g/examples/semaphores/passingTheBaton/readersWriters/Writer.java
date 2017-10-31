@@ -20,13 +20,13 @@ public class Writer implements Runnable {
 		
 		for (int i=0; i<GlobalProgramState.numberOfIterations; ++i) {
 			System.out.println("Writer "+AndrewsProcess.currentAndrewsProcessId()+" trying to enter critical section");
-			GlobalProgramState.entry.acquireUninterruptibly();
+			GlobalProgramState.entry.P();
 			System.out.println("Writer "+AndrewsProcess.currentAndrewsProcessId()+" trying to enter critical section, state: "+GlobalProgramState.getState());
 			if (GlobalProgramState.numberOfWriters>0 || GlobalProgramState.numberOfReaders>0) {
 				++GlobalProgramState.numberOfDelayedWriters;
 				System.out.println("Writer "+AndrewsProcess.currentAndrewsProcessId()+" delayed, state: "+GlobalProgramState.getState());
-				GlobalProgramState.entry.release();
-				GlobalProgramState.delayedWriter.acquireUninterruptibly();
+				GlobalProgramState.entry.V();
+				GlobalProgramState.delayedWriter.P();
 				System.out.println("Writer "+AndrewsProcess.currentAndrewsProcessId()+" released, state: "+GlobalProgramState.getState());
 
 			}
@@ -38,7 +38,7 @@ public class Writer implements Runnable {
 			AndrewsProcess.uninterruptibleMinimumDelay(Math.abs(r.nextInt(1000)));
 			
 			System.out.println("Writer "+AndrewsProcess.currentAndrewsProcessId()+" trying to exit critical section");
-			GlobalProgramState.entry.acquireUninterruptibly();
+			GlobalProgramState.entry.P();
 			--GlobalProgramState.numberOfWriters;
 			System.out.println("Writer "+AndrewsProcess.currentAndrewsProcessId()+" exiting critical section, state: "+GlobalProgramState.getState());
 			GlobalProgramState.signal();

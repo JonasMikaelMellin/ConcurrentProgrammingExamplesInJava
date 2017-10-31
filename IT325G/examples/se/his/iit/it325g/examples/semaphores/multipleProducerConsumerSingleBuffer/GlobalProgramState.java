@@ -16,15 +16,15 @@
 
 package se.his.iit.it325g.examples.semaphores.multipleProducerConsumerSingleBuffer;
 
-import java.util.concurrent.Semaphore;
 
 import se.his.iit.it325g.common.AndrewsProcess;
 import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
+import se.his.iit.it325g.common.AndrewsSemaphore;
 
 public class GlobalProgramState {
 	public static int buffer;
-	public static Semaphore empty=new Semaphore(1);
-	public static Semaphore full=new Semaphore(0);
+	public static AndrewsSemaphore empty=new AndrewsSemaphore(1);
+	public static AndrewsSemaphore full=new AndrewsSemaphore(0);
 
 	public static void main(String argv[]) {
 		

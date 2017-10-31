@@ -25,10 +25,10 @@ public class Producer implements Runnable {
 	public void run() {
 		int i=1;
 		while(true) {
-			GlobalProgramState.empty.acquireUninterruptibly();
+			GlobalProgramState.empty.P();
 			System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+" producing "+i);
 			GlobalProgramState.buffer=i++;
-			GlobalProgramState.full.release();
+			GlobalProgramState.full.V();
 		}
 	}
 
