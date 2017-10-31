@@ -32,6 +32,8 @@
 % These packages are all incorporated in the memoir class to one degree or another...
 \usepackage{listings}
 \usepackage{color}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
 
 %%% Listings
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -64,7 +66,7 @@
 \pagestyle{fancy} % options: empty , plain , fancy
 \renewcommand{\headrulewidth}{0pt} % customise the layout...
 \lhead{}\chead{}\rhead{}
-\lfoot{}\cfoot{\thepage}\rfoot{}
+\lfoot{\copyright 2017, Jonas Mellin}\cfoot{\thepage}\rfoot{}
 
 %%% SECTION TITLE APPEARANCE
 \usepackage{sectsty}
@@ -81,7 +83,7 @@
 
 %%% The "real" document content comes below...
 
-\title{A Java Library for Concurrent Programming at Novice/Advanced Beginner Level}
+\title{A Java Library for Concurrent Programming at Novice/Advanced Beginner Level\thanks{This document was produced with \LaTeX}\\Version 1.0}
 \author{Jonas Mellin}
 %\date{} % Activate to display a given date or no date (if empty),
          % otherwise the current date is printed 
@@ -145,12 +147,13 @@ In addition, in the package {\bfseries java.lang.concurrent}, numerous synchroni
 \subsection{Semaphores}
 \label{sec:semaphores}
 
-The semaphores in Java are defined in {\bfseries java.lang.concurrent.semaphore} and it provide more functionality than P and V in the book. Essentially, there are numerous varieties of the methods that have a similar semantics as the P operation (e.g., 
-{\bfseries acquire}, {\bfseries acquireUninterrupibly()}, {\bfseries acquire(int permin)}, {\bfseries tryAcquire()}). Out of these, the {\bfseries acquireUninterrupibly()} is the method that have the same semantics as the P operation in SR and is the method that should be used in the course. The V operation is only represented by the {\bfseries release()} method. In Java, \emph{P(empty)} is the same as \emph{empty.acquireUniterruptibly()} and \emph{V(empty)} is the same as \emph{empty.release()}.
+A wrapper limiting the API of Java semaphores is realized in {\bfseries AndrewsSemaphore}. It provides a subset of the functionality of Java semaphores where the names of the methods are chosen from the Andrews \cite{andrews_foundations_2002}, which are based on Dijkstra's original name for semaphore operations: \emph{P()} and \emph{V()}. Essentially, the \emph{P()} method calls \emph{acquireUninterruptibly()} on the internal semaphore used for implementing {\bfseries AndrewsSemaphore}.
 
-In figure~\ref{fig:pcsbgps}, the {\bfseries GlobalProgramState} of the producer/consumer based on a single buffer is illustrated. There are three global variables: \emph{buffer}, the buffer for communicating values of type int (in this example) between the producer and the consumer processes; \emph{empty}, the semaphore that is used to synchronize producers so that they do not write unless there is space and only a single producer at the same time can be in the critical section; \emph{full}, the semaphore that is used to synchronize consumers so that they only can consume when there is  a value in the buffer. In Java, the initialization is done by allocation an object of the class {\bfseries Semaphore} with the initial value of the semaphore as the initialization value. 
 
-On line 11 and 12, 10 producer processes and 20 consumer processes are cleclared. A {\bfseries Producer} is a {\bfseries Runnable} implementing an example of a producer semantics and {\bfseries Consumer} is a {\bfseries Runnable} implementing an example of a consumer semantics. Similarly to figure~\ref{fig:tieBreakerGPS}, the array of {\bfseries RunnableSpecification} is passed to the factory resulting in an array of {\bfseries AndrewsProcess} objects, which are then started. 
+
+In figure~\ref{fig:pcsbgps}, the {\bfseries GlobalProgramState} of the producer/consumer based on a single buffer is illustrated. There are three global variables: \emph{buffer}, the buffer for communicating values of type int (in this example) between the producer and the consumer processes; \emph{empty}, the semaphore that is used to synchronize producers so that they do not write unless there is space and only a single producer at the same time can be in the critical section; \emph{full}, the semaphore that is used to synchronize consumers so that they only can consume when there is  a value in the buffer. In Java, the initialization is done by allocation an object of the class {\bfseries AndrewsSemaphore} with the initial value of the semaphore as the initialization value. 
+
+On line 11 and 12, 10 producer processes and 20 consumer processes are declared. A {\bfseries Producer} is a {\bfseries Runnable} implementing an example of a producer semantics and {\bfseries Consumer} is a {\bfseries Runnable} implementing an example of a consumer semantics. Similarly to figure~\ref{fig:tieBreakerGPS}, the array of {\bfseries RunnableSpecification} is passed to the factory resulting in an array of {\bfseries AndrewsProcess} objects, which are then started. 
 
 \lstset{inputpath=c:/git/IT325G/IT325G/examples/se/his/iit/it325g/examples/semaphores/multipleProducerConsumerSingleBuffer}
 \begin{figure}[h]
@@ -159,7 +162,7 @@ On line 11 and 12, 10 producer processes and 20 consumer processes are cleclared
 \label{fig:pcsbgps}
 \end{figure}
 
-The producer process (in figure~\ref{fig:pcsbproc}), defined as a {\bfseries Runnable}, in the class {\bfseries Producer}, implements an example of a producer behavior. On line 8, the \emph{ empty} semaphore is acquired uninterrupibly\footnote{That is, it is not terminated by an exception}; if the $\textit{empty}>0$ the process acquires the semaphore and can pass, otherwise the process is blocked on the semaphore until another process releases the semaphore. In line 10, the buffer is assigned to a value and the local counter $i$ is increased. After this, on line 11, the \emph{full} semaphore is released.
+The producer process (in figure~\ref{fig:pcsbproc} on page~\pageref{fig:pcsbproc}), defined as a {\bfseries Runnable}, in the class {\bfseries Producer}, implements an example of a producer behavior. On line 8, the \emph{ empty} semaphore is acquired uninterrupibly\footnote{That is, it is not terminated by an exception}; if the $\textit{empty}>0$ the process acquires the semaphore and can pass, otherwise the process is blocked on the semaphore until another process releases the semaphore. In line 10, the buffer is assigned to a value and the local counter $i$ is increased. After this, on line 11, the \emph{full} semaphore is released.
 
 \begin{figure}[h]
 \lstinputlisting[language=Java,linerange=21-35]{Producer.java}
@@ -167,7 +170,7 @@ The producer process (in figure~\ref{fig:pcsbproc}), defined as a {\bfseries Run
 \label{fig:pcsbproc}
 \end{figure}
 
-Correspondingly, the consumer process (in figure~\ref{fig:pcsbcons}), defined as a {\bfseries Runnable} too, in the class {\bfseries Consumer}, implements an example of consumer behavior. In this case, on line 7 the \emph{full} semaphore is acquired, the value is consumed from the buffer on line 9, and on line 10 the \emph{empty} semaphore is released. 
+Correspondingly, the consumer process (in figure~\ref{fig:pcsbcons} on page~\pageref{fig:pcsbcons}), defined as a {\bfseries Runnable} too, in the class {\bfseries Consumer}, implements an example of consumer behavior. In this case, on line 7 the \emph{full} semaphore is acquired, the value is consumed from the buffer on line 9, and on line 10 the \emph{empty} semaphore is released. 
 
 \begin{figure}[h]
 \lstinputlisting[language=Java,linerange=19-35]{Consumer.java}
@@ -218,35 +221,150 @@ In figure~\ref{fig:pcsbproc-monitor}, the producer is defined. This is less erro
 
 \section{Mechanisms based on Message Passing}
 
-In message passing, an abstract class {\bfseries Chan} has been defined. This class essentially supports two methods: \emph{send(value)} and \emph{receive(value). There are two kinds of channels: {\bfseries AsynchronousChan} and {\bfseriers SynchronousChan}.
+In message passing, an abstract class {\bfseries Chan} has been defined. This class essentially supports two methods: \emph{send(value)} and \emph{receive(value)}. There are two kinds of channels: {\bfseries AsynchronousChan} and {\bfseries SynchronousChan}. Further, to send multiple request types between processes, it is advantageous to employ Java inheritance as in the example used in this section. 
 
 \subsection{Asynchronous Message Passing}
 
+\lstset{inputpath=c:/git/IT325G/IT325G/examples/se/his/iit/it325g/examples/messagePassing/simpleClientServer}
+\begin{figure}[ht]
+\lstinputlisting[language=Java,linerange={54-61,63-87}]{ClientSimulation.java}
+\caption{ClientSimulation of simple Client/Server, based on asynchronous message passing}
+\label{fig:scs-clientSimulation}
+\end{figure}
+
+In the simple client/server example, there are two types of channels, one type for messages passed to the server and one type for sending response messages from the server to the client. On line 9 in figure~\ref{fig:scs-clientSimulation} defining the simulation of a client, a message containing a request is sent to the server (that is assumed to be connected to the channel). On the next line (10), the response is awaited from the server in the form of a {\bfseries ServerResponse}. The code at line 7-8 is to randomly generate a client request and the lines 11-26 are there to process the response. Note that a response can contain an developmental exception, which results in a stack trace when line 25 is executed. 
+
+\begin{figure}[ht]
+\lstinputlisting[language=Java,linerange={29-69}]{Server.java}
+\caption{Server of simple Client/Server, based on asynchronous message passing}
+\label{fig:scs-server}
+\end{figure}
+
+In line 4 in the Server (see figure~\ref{scs-server}), the client request in the form of an object of class {\bfseries ClientRequest} is received. In line 4, the serverResponse variable is declared. On line 6-31, the client request is processed. The server keeps track of a value and the requests are: ADD value, SUBTRACT value, and GET\_SERVER\_VALUE. In both cases, if there is an exception, then on line 12-14 and 20-22 the exception is passed to the client as a part of a server response. Normal operation is performed on line 9-10 and line 18. Line 24-27 handles the CLOSE\_SESSION, which is sent by the clients upon completion. Note that in a real application, you should open a session, then used the server in the session and then close the session. Further, such a serve should not shutdown if there are no current clients, which is the case in this simple example. 
+
+\begin{figure}[ht]
+\begin{tikzpicture}[every tree node/.style = draw]
+\Tree [.{ {\bfseries ClientRequest} }
+	[.{ {\bfseries ClientRequestArithmeticOperator} } 
+		[.{ {\bfseries ClientRequestAddValue} } ]
+		[.{ {\bfseries ClientRequestSubtractValue} } ]
+]
+	[.{\bfseries ClientRequestGetServerValue}
+]
+]
+\end{tikzpicture}
+\caption{Simple Client/Server ClientRequest type hierarchy}
+\label{fig:scs-cri}
+\end{figure}
+
+
+\begin{figure}[ht]
+\lstinputlisting[language=Java,linerange=19-43]{ClientRequest.java}
+\caption{ClientRequest (abstract class) of simple Client/Server, based on asynchronous message passing}
+\label{fig:scs-clientRequest}
+\end{figure}
+
+Figure~\ref{fig:scs-cri} depicts the inheritance hierarchy of {\bfseries ClientRequest}. In figure~\ref{fig:scs-clientRequest}, the abstract top class {\bfseries ClientRequest} is defined. On line 2, a clientId parameter common to all requests to enable identification of what client process request comes from so the response can be sent to the right client. The abstract class\footnote{It is not allowed to create instances directly of an abstract class. There are exceptions to this rule, but that is outside the scope of this course.} defines the method \emph{getClientId()} on line 18-20. On line 22, the abstract method \emph{getOperation()} is defined; this method is defined to return the proper enumeration (defined on line 4). The abstract method \emph{getRequestValue} is valid for all arithmetic operations, it returns the value to add or subtract to the server value. 
+
+
+
+
+
 \subsection{Synchronous Message Passing}
+
+The synchronous message passing is similar to asynchronous message with the exception that the design must reflect the fact that two processes must meet and exchange values.
 
 \subsection{Rendezvous}
 
+There is a Rendezvous in this API. Due to time limitations, it is not described or used. An updated version of this document will be provided later. 
+
 \section{Application Programming Interfaces}
+
+This API is used to make the semantics of processes as close to the semantics used in \cite{andrews_foundations_2000}. Further, the aim is also to reduce the complexity of the Java API for the course. 
 
 \subsection{AndrewsProcess class}
 
+\begin{table}[ht]
+\begin{tabular}{|p{0.5\textwidth}|p{0.5\textwidth}|}
+\hline
+\hline
+{\bfseries Method} & {\bfseries Description}\\
+\hline\hline
+AndrewsProcess(Runnable runnable) &
+Creates an AndrewsProcess object that can be started.\\
+\hline
+int getAndrewsPid() & Returns the process identity, an integer $\geq 0$
+\\
+\hline
+Runnable getRunnable() & Returns the runnable of the current process \\
+\hline
+static AndrewsProcess[] andrewsProcessFactory(RunnableSpecification[]) & Creates an array of processes according to the specification of an array of RunnableSpecification \\
+\hline
+static AndrewsProcess currentAndrewsProcess() & Return the currently executing AndrewsProcess object. \\
+\hline
+static int currentAndrewsProcessId() & Returns the process identity (an integer) of the currently executing AndrewsProcess object. \\
+\hline
+static int currentRelativeToTypeAndrewsProcessId() & Returns the relative process identity with respect to the type of the Runnable. It is useful to get an identity for handling a particular type of processes.\\
+\hline
+static void startAndrewsProcesses(AndrewsProcess[]) & Starts the processes\\
+\hline
+static void uninterruptibleMinimumDelay(int millis)& Delays the process in an uninterruptible way for \emph{millis} time except for terminations causing the entire program to terminate. \\
+\hline
+\end{tabular}
+\caption{AndrewsProcess API subset}
+\label{tab:andrewsProcessAPI}
+\end{table}
+
+The {\bfseries AndrewsProcess} API is a limiting class that extends {\bfseries Thread} in Java. Most notably, the AndrewsProcess enforces the use of {\bfseries Runnable} and use integers as process identifiers to relates to the semantics used in the examples \cite{andrews_foundations_2000}. The recommended part of the {\bfseries AndrewsProcess} class is found in table~\ref{tab:andrewsProcessAPI}~on~page~\pageref{tab:andrewsProcessAPI}. 
+
 \subsection{Chan class}
+
+\begin{figure}[ht]
+\begin{tikzpicture}[every tree node/.style = draw]
+\Tree [.{ {\bfseries Chan} }
+	[.{ {\bfseries AsynchronousChan} } 
+]
+	[.{\bfseries SynchronousChan}
+]
+]
+\end{tikzpicture}
+\caption{Chan class hierarchy}
+\label{fig:chanHierarchy}
+
+\end{figure}
+
+The {\bfseries Chan} class hierarchy is depicted in figure~\ref{fig:chanHierarchy}~on~page~\pageref{fig:chanHierarchy}. The class {\bfseries Chan} itself is an abstract top class defining the methods \emph{send()} and \emph{receive()}. The {\bfseries AsynchronousChan} is an implementation of the asynchronous message passing and {\bfseries  SynchronousMessagePassing} is an imlplementation of the synchronous message passing. The actual implementation of {\bfseries AsynchronousChan} is based on {\bfseries LinkedBlockingQueue} that closely resembles the semantics of asynchronous message passing with one minor difference. When there is no more space in the queue, an exception is raised in {\bfseries LinkedBlockingQueue}. In contrast, the semantics advocated by Andrews is that \emph{send()} blocks until there is space in the buffer for another message. This latter semantics is implemented in {\bfseries ASynchronousChan}. 
+
+The Chan queues can take any kind of objects of a specified type. This is detemined in the declaration of the variable. For example, \emph{Chan$<$Integer$>$ integerChan=new AsynchronousChan$<$Integer$>$();} creates a channel that can contain integers.
 
 \section{How To Guide}
 
 \subsection{Define a Process}
+First you need to create a class that implements the {\bfseries Runnable} interface. Secondly, you need to create processes executing the {\bfseries Runnable} objects.
+
+In figure~\ref{fig:pcsbproc} on page~\pageref{fig:pcsbproc}, a Runnable is defined. The \emph{run()} method overrides the default (abstract) method in the interface. In this particular case, it is a simulated producer process.
+
+ Create an array of {\bfseries RunnableSpecification} and assign each element to an object of {\bfseries RunnableSpecification}. For example, lines 10-12 in figure~\ref{fig:pcsbgps}~on~page~\pageref{fig:pcsbgps}, the array of {\bfseries RunnableSpecification} contains the declaration of 10 producer and 20 consumer processes.  This specification is sent to the factory method on line 17, which returns an array of processes. 
 
 \subsection{Start a Process}
+To start a set of processes, take the array of AndrewsProcess objects and pass it to the method that starts all processes. See line 15 in figure~\ref{fig:pcsbgps}.
 
 \subsection{Keep Track of Data Concerning a Process}
 
+Since the process identity, both the global with respect to the application scope and the identity relative to the same type, is an integer, arrays can be employed to keep track of data regarding the processes themselves. For example, in the simple client/server example in section~\ref{sec:simpleClientServer} on page~\pageref{sec:simpleClientServer}, the relative identity of clients are employed to find the channel to send back messages to the client. 
+
 \subsection{Synchronize Processes}
+
+Depends on the mechanism. 
 
 \subsection{Communicate between Processes}
 
-\subsection{Initialize a Program}
+If shared variables are used, then use shared variables. Otherwise, use message passing. 
 
-\subsection{Terminate a Program}
+\subsection{Initialize a Program}
+In the class GlobalProgramState, add a public static declaration for each global variable in the solution. Initialized these in the beginning of the \emph{main(String argv)} method. Each process can be initialized in the beginning of the \emph{run()} method. 
+
+
 
 \bibliographystyle{apalike}
 \bibliography{references}
