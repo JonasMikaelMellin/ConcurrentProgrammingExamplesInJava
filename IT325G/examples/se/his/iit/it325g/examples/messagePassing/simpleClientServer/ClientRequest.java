@@ -19,7 +19,7 @@ package se.his.iit.it325g.examples.messagePassing.simpleClientServer;
 public abstract class ClientRequest {
 	private int clientId;
 	
-	enum Operation {GET_SERVER_VALUE,ADD,SUBTRACT,CLOSE_SESSION};
+	enum Operation {GET_SERVER_VALUE,ADD,SUBTRACT,CLOSE_SIMULATED_CLIENT_SESSION};
 
 	public ClientRequest(int clientId) {
 		this.clientId=clientId;

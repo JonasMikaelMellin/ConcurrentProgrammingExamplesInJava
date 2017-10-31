@@ -49,7 +49,7 @@ public class Server implements Runnable {
 					serverResponse=new ServerResponse(e);
 				}
 				break;
-			case CLOSE_SESSION:
+			case CLOSE_SIMULATED_CLIENT_SESSION:
 				--this.numberOfSessions;
 				serverResponse=new ServerResponse(true);
 				break;

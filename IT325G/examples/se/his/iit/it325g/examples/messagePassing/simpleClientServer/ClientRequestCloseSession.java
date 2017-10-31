@@ -30,7 +30,7 @@ public class ClientRequestCloseSession extends ClientRequest {
 
 	@Override
 	public Operation getOperation() {
-		return Operation.CLOSE_SESSION;
+		return Operation.CLOSE_SIMULATED_CLIENT_SESSION;
 	}
 
 }
