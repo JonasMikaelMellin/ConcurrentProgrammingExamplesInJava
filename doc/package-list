@@ -11,6 +11,8 @@ se.his.iit.it325g.examples.messagePassing.peerValueExchange.centralized
 se.his.iit.it325g.examples.messagePassing.peerValueExchange.ring
 se.his.iit.it325g.examples.messagePassing.peerValueExchange.symmetric
 se.his.iit.it325g.examples.messagePassing.simpleClientServer
+se.his.iit.it325g.examples.monitors.multipleProducerConsumerSingleBuffer
+se.his.iit.it325g.examples.monitors.readersWriters
 se.his.iit.it325g.examples.rendezvous.criticalSection
 se.his.iit.it325g.examples.rendezvous.diningPhilosophers
 se.his.iit.it325g.examples.semaphores.diningPhilosphers
@@ -18,3 +20,6 @@ se.his.iit.it325g.examples.semaphores.multipleProducerConsumerBoundedBuffer
 se.his.iit.it325g.examples.semaphores.multipleProducerConsumerSingleBuffer
 se.his.iit.it325g.examples.semaphores.passingTheBaton.readersWriters
 se.his.iit.it325g.examples.semaphores.producerConsumerBoundedBuffer
+se.his.iit.it325g.examples.workerProcess.dynamic.factorialWithJoin
+se.his.iit.it325g.examples.workerProcess.dynamic.factorialWithJoin.BigInteger
+se.his.iit.it325g.examples.workerProcess.dynamic.factorialWithMonitor
