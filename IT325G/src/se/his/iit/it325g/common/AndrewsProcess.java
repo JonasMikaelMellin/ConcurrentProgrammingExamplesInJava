@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import se.his.iit.it325g.common.rendezvous.Rendezvous;
 
 /**
- * This class is a wrapper of the Tread class. The purpose is to make threads in Java conform to the process concept used
+ * This class is a wrapper of the Thread class. The purpose is to make threads in Java conform to the process concept used
  * in the course literature as much as possible as well as force students to employ the Runnable interface rather than extending
  * the Thread class. The reason for the former is purely pedagogical. The reason of the latter is that employing the Runnable 
  * interface does not restrict classes from, for example, being used in the java.lang.concurrent package. 
