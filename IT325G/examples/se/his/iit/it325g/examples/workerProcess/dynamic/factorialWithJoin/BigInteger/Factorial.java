@@ -14,22 +14,25 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package se.his.iit.it325g.examples.workerProcess.dynamic.factorialWithJoin.bigInteger;
+package se.his.iit.it325g.examples.workerProcess.dynamic.factorialWithJoin.BigInteger;
+
+import java.math.BigInteger;
 
 import se.his.iit.it325g.common.AndrewsProcess;
 
 public class Factorial implements Runnable {
-	private long start;
-	private long end;
-	private long result;
+	private BigInteger start;
+	private BigInteger end;
+	private BigInteger result;
 	
-	public Factorial(long start,long end) {
+	public Factorial(final BigInteger start,final BigInteger  end) {
 		this.start=start;
 		this.end=end;
 	}
 	
-	public static long factorial(long n) {
-		Factorial factorial=new Factorial(1L,n);
+	
+	public static BigInteger factorial(BigInteger n) {
+		Factorial factorial=new Factorial(BigInteger.ONE, n);
 		AndrewsProcess ap=new AndrewsProcess(factorial);
 		ap.start();
 		try {
@@ -40,10 +43,10 @@ public class Factorial implements Runnable {
 		return factorial.getResult();
 	}
 	
-	private AndrewsProcess[] createAndStartProcesses(long start,long m, long end) {
+	private AndrewsProcess[] createAndStartProcesses(final BigInteger start, final BigInteger m, final BigInteger end) {
 		AndrewsProcess workerProcess[]=new AndrewsProcess[2];
 		workerProcess[0]=new AndrewsProcess(new Factorial(start,m));
-		workerProcess[1]=new AndrewsProcess(new Factorial(m+1,end));
+		workerProcess[1]=new AndrewsProcess(new Factorial(m.add(BigInteger.ONE),end));
 		for (int i=0; i<2; ++i) {
 			workerProcess[i].start();
 		}
@@ -58,17 +61,17 @@ public class Factorial implements Runnable {
 		return workerProcess;
 	}
 	
-	public long factorial(long start,long end) {
-		long diff=end-start;
-		if (diff==0) {
+	public BigInteger factorial(BigInteger start,BigInteger end) {
+		BigInteger diff=end.subtract(start);
+		if (diff.compareTo(BigInteger.ZERO)==0) {
 			return start;
-		} else if (diff==1) {
-			return start*end;
+		} else if (diff.compareTo(BigInteger.ONE)==0) {
+			return start.multiply(end);
 		} else {
-			long m=diff/2+start;
+			BigInteger m=diff.divide(BigInteger.valueOf(2L)).add(start);
 			AndrewsProcess workerProcess[]=createAndStartProcesses(start,m,end);
 
-			return ((Factorial)workerProcess[0].getRunnable()).getResult()*((Factorial)workerProcess[1].getRunnable()).getResult();
+			return ((Factorial)workerProcess[0].getRunnable()).getResult().multiply(((Factorial)workerProcess[1].getRunnable()).getResult());
 			
 		}
 	}
@@ -78,11 +81,11 @@ public class Factorial implements Runnable {
 		this.result=factorial(this.start,this.end);
 		
 	}
-	public long getResult() {
+	public BigInteger getResult() {
 		return this.result;
 	}
 	public static void main(String argv[]) {
-		System.out.println(Factorial.factorial(5));
+		System.out.println(Factorial.factorial(BigInteger.valueOf(1000L)));
 	}
 
 }
