@@ -38,9 +38,9 @@ public class PhilosopherRightToLeft implements Runnable {
 			GlobalProgramState.fork[left].P();
 			System.out.println("Philosopher "+AndrewsProcess.currentAndrewsProcessId()+" is eating");
 			AndrewsProcess.uninterruptibleMinimumDelay(Math.abs(r.nextInt(1000)));
-			GlobalProgramState.fork[right].V();
-			System.out.println("Philosopher "+AndrewsProcess.currentAndrewsProcessId()+" released fork "+right);
 			GlobalProgramState.fork[left].V();
+			System.out.println("Philosopher "+AndrewsProcess.currentAndrewsProcessId()+" released fork "+right);
+			GlobalProgramState.fork[right].V();
 			System.out.println("Philosopher "+AndrewsProcess.currentAndrewsProcessId()+" released fork "+left);
 			System.out.println("Philosopher "+AndrewsProcess.currentAndrewsProcessId()+" is thinking");
 			AndrewsProcess.uninterruptibleMinimumDelay(Math.abs(r.nextInt(1000)));

@@ -21,6 +21,13 @@ import se.his.iit.it325g.common.AndrewsProcess;
 import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
 import se.his.iit.it325g.common.AndrewsSemaphore;
 
+/**
+ * GlobalProgramState for the multiple producer/consumer problem with
+ * a circular buffer. 
+ * @author melj
+ *
+ */
+
 public class GlobalProgramState {
 	public static int n=10;
 	public static int buffer[]=new int[n];
@@ -28,14 +35,16 @@ public class GlobalProgramState {
 	public static int rear=0;
 	public static AndrewsSemaphore empty=new AndrewsSemaphore(n);
 	public static AndrewsSemaphore full=new AndrewsSemaphore(0);
+	public static AndrewsSemaphore mutexP=new AndrewsSemaphore(1);
+	public static AndrewsSemaphore mutexC=new AndrewsSemaphore(1);
 
 	public static void main(String argv[]) {
 		
 		System.out.print(AndrewsProcess.licenseText());
 		
 		RunnableSpecification rs[]=new RunnableSpecification[2];
-		rs[0]=new RunnableSpecification(Producer.class,1);
-		rs[1]=new RunnableSpecification(Consumer.class,1);
+		rs[0]=new RunnableSpecification(Producer.class,10);
+		rs[1]=new RunnableSpecification(Consumer.class,10);
 		try {
 			AndrewsProcess process[]=AndrewsProcess.andrewsProcessFactory(rs);
 			AndrewsProcess.startAndrewsProcesses(process);

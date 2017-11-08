@@ -18,18 +18,28 @@ package se.his.iit.it325g.examples.semaphores.multipleProducerConsumerBoundedBuf
 
 import se.his.iit.it325g.common.AndrewsProcess;
 
+/**
+ * Consumer process in the multiple producer/consumer problem with
+ * a circular buffer.
+ * 
+ * @author melj
+ *
+ */
+
 public class Consumer implements Runnable {
 
 
 	@Override
 	public void run() {
 		while(true) {
+			GlobalProgramState.mutexC.P();
 			GlobalProgramState.full.P();
 			int value=GlobalProgramState.buffer[GlobalProgramState.front];
 			GlobalProgramState.front=(GlobalProgramState.front+1)%GlobalProgramState.n;
-			System.out.println("Consumer consumer value "+value);
+			System.out.println(AndrewsProcess.currentAndrewsProcessId()+" consumes value "+value);
 			GlobalProgramState.empty.V();
-			AndrewsProcess.uninterruptibleMinimumDelay(1000);
+			GlobalProgramState.mutexC.V();
+			AndrewsProcess.uninterruptibleMinimumDelay(10);
 
 		}
 	}

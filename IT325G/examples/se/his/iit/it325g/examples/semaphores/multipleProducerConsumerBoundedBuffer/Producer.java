@@ -18,6 +18,14 @@ package se.his.iit.it325g.examples.semaphores.multipleProducerConsumerBoundedBuf
 
 import se.his.iit.it325g.common.AndrewsProcess;
 
+/**
+ * Producer process in a multiple producer/consumer solution with a 
+ * bounded buffer.
+ * 
+ * @author melj
+ *
+ */
+
 public class Producer implements Runnable {
 
 
@@ -25,11 +33,16 @@ public class Producer implements Runnable {
 	public void run() {
 		int i=1;
 		while(true) {
+			GlobalProgramState.mutexP.P();
 			GlobalProgramState.empty.P();
 			System.out.println(AndrewsProcess.currentAndrewsProcessId()+" producing "+i);
 			GlobalProgramState.buffer[GlobalProgramState.rear]=i++;
 			GlobalProgramState.rear=(GlobalProgramState.rear+1)%GlobalProgramState.n;
 			GlobalProgramState.full.V();
+			GlobalProgramState.mutexP.V();
+			AndrewsProcess.uninterruptibleMinimumDelay(10);
+
+
 		}
 	}
 
