@@ -14,25 +14,45 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package se.his.iit.it325g.examples.monitors.multipleProducerConsumerSingleBuffer;
+package se.his.iit.it325g.examples.monitors.diningPhilosophers;
 
-import java.util.Random;
+import java.util.PriorityQueue;
 
 import se.his.iit.it325g.common.AndrewsProcess;
 
-public class Consumer implements Runnable {
+/**¨
+ * Conventional shortest job next solution in Java. 
+ * @author melj
+ *
+ */
 
-
-	@Override
-	public void run() {
-		Random r=new Random(AndrewsProcess.currentAndrewsProcessId());
-		while(true) {
-			System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+": fetching value ");
-			int value=GlobalProgramState.buffer.fetch();
-			System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+": consuming value "+value);
-			AndrewsProcess.uninterruptibleMinimumDelay(Math.abs(r.nextInt()%100));
-
+public class EatingController {
+	private boolean eating[]=new boolean[GlobalProgramState.n];
+	
+	public synchronized void request(int phid) {
+		int left=(phid+1)%GlobalProgramState.n;
+		int right=(phid-1)%GlobalProgramState.n;
+		if (right<0) {
+			right=GlobalProgramState.n+right;
 		}
+		if (left==0) {
+			int tmp=right;
+			right=left;
+			left=tmp;
+		} 
+
+		while (this.eating[left] || this.eating[right]) {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				AndrewsProcess.defaultInterruptedExceptionHandling(e);
+			}
+		}
+		this.eating[phid]=true;
+	}
+	public synchronized void release(int phid) {
+		this.eating[phid]=false;
+		this.notifyAll();
 	}
 
 }

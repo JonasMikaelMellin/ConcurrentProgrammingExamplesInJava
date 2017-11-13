@@ -14,25 +14,29 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package se.his.iit.it325g.examples.monitors.multipleProducerConsumerSingleBuffer;
+package se.his.iit.it325g.examples.monitors.diningPhilosophers;
 
-import java.util.Random;
 
 import se.his.iit.it325g.common.AndrewsProcess;
+import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
 
-public class Producer implements Runnable {
+public class GlobalProgramState {
+	public static final int n=5;
+	public static volatile EatingController eatingController=new EatingController();
 
+	public static void main(String argv[]) {
+		
+		System.out.print(AndrewsProcess.licenseText());
 
-	@Override
-	public void run() {
-		int i=AndrewsProcess.currentAndrewsProcessId()*1000000;
-		Random r=new Random(AndrewsProcess.currentAndrewsProcessId());
-		while(true) {
-			System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+" producing "+i);
-			GlobalProgramState.buffer.deposit(i);
-			System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+" deposited "+i);
-			++i;
-			AndrewsProcess.uninterruptibleMinimumDelay(Math.abs(r.nextInt()%100));
+		RunnableSpecification rs[]=new RunnableSpecification[1];
+		rs[0]=new RunnableSpecification(ClientSimulation.class,n);
+		try {
+			AndrewsProcess process[]=AndrewsProcess.andrewsProcessFactory(rs);
+			AndrewsProcess.startAndrewsProcesses(process);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
 		}
 	}
 
