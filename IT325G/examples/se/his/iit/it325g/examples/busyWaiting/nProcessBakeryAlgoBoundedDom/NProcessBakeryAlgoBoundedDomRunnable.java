@@ -14,7 +14,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package se.his.iit.it325g.examples.busyWaiting.nProcessBakeryAlgorithmWithBoundedDomain;
+package se.his.iit.it325g.examples.busyWaiting.nProcessBakeryAlgoBoundedDom;
 
 
 import java.util.Arrays;
@@ -30,7 +30,7 @@ import se.his.iit.it325g.common.AndrewsProcess;
  * 
  *
  */
-public class NProcessBakeryAlgorithmWithBoundedDomainRunnable implements Runnable {
+public class NProcessBakeryAlgoBoundedDomRunnable implements Runnable {
 
 	
 	@Override

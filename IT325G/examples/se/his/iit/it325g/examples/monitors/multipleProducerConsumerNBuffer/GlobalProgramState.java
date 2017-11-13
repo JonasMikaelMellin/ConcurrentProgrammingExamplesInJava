@@ -14,23 +14,23 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package se.his.iit.it325g.examples.busyWaiting.nProcessBakeryAlgorithmWithBoundedDomain;
+package se.his.iit.it325g.examples.monitors.multipleProducerConsumerNBuffer;
 
-import java.util.stream.IntStream;
 
 import se.his.iit.it325g.common.AndrewsProcess;
 import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
 
 public class GlobalProgramState {
-	public static volatile int n=10;
-	public static volatile int turn[]=IntStream.generate(() -> -1).limit(n).toArray(); // defaults to n * -1
-	
+	public static final int n = 5;
+	public static volatile NBufferMonitor buffer=new NBufferMonitor();
+
 	public static void main(String argv[]) {
 		
 		System.out.print(AndrewsProcess.licenseText());
 
-		RunnableSpecification rs[]=new RunnableSpecification[1];
-		rs[0]=new RunnableSpecification(NProcessBakeryAlgorithmWithBoundedDomainRunnable.class,n);
+		RunnableSpecification rs[]=new RunnableSpecification[2];
+		rs[0]=new RunnableSpecification(Producer.class,10);
+		rs[1]=new RunnableSpecification(Consumer.class,1);
 		try {
 			AndrewsProcess process[]=AndrewsProcess.andrewsProcessFactory(rs);
 			AndrewsProcess.startAndrewsProcesses(process);
