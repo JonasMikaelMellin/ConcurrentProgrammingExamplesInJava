@@ -24,7 +24,8 @@ public class Consumer implements Runnable {
 	@Override
 	public void run() {
 		while(true) {
-			int value=GlobalProgramState.buffer.consume();
+			System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+": fetching value ");
+			int value=GlobalProgramState.buffer.fetch();
 			System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+": consuming value "+value);
 
 		}

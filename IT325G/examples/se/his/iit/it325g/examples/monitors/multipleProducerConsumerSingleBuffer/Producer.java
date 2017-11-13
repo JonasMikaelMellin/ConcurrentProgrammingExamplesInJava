@@ -23,10 +23,13 @@ public class Producer implements Runnable {
 
 	@Override
 	public void run() {
-		int i=1;
+		int i=AndrewsProcess.currentAndrewsProcessId()*1000000;
 		while(true) {
 			System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+" producing "+i);
-			GlobalProgramState.buffer.produce(i++);
+			GlobalProgramState.buffer.deposit(i);
+			System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+" deposited "+i);
+			++i;
+
 		}
 	}
 

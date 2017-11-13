@@ -21,7 +21,8 @@ import se.his.iit.it325g.common.AndrewsProcess;
 import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
 
 public class GlobalProgramState {
-	public static SingleBufferMonitor buffer=new SingleBufferMonitor();
+	public static final int n = 5;
+	public static volatile NBufferMonitor buffer=new NBufferMonitor();
 
 	public static void main(String argv[]) {
 		
@@ -29,7 +30,7 @@ public class GlobalProgramState {
 
 		RunnableSpecification rs[]=new RunnableSpecification[2];
 		rs[0]=new RunnableSpecification(Producer.class,10);
-		rs[1]=new RunnableSpecification(Consumer.class,20);
+		rs[1]=new RunnableSpecification(Consumer.class,1);
 		try {
 			AndrewsProcess process[]=AndrewsProcess.andrewsProcessFactory(rs);
 			AndrewsProcess.startAndrewsProcesses(process);

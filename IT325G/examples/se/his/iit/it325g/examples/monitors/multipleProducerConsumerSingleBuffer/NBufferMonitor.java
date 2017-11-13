@@ -19,28 +19,26 @@ package se.his.iit.it325g.examples.monitors.multipleProducerConsumerSingleBuffer
 
 import se.his.iit.it325g.common.AndrewsProcess;
 
-public class SingleBufferMonitor {
-	private int buffer;
-	private boolean full=false;
+public class NBufferMonitor {
+	private int buffer[]=new int[GlobalProgramState.n];
+	private int f=0, r=0, cnt=0;
 
-	public SingleBufferMonitor() {
-	}
-	
-	public synchronized void produce(int value) {
-		while(full) {
+	public synchronized void deposit(int value) {
+		while (cnt==GlobalProgramState.n) {
 			try {
 				this.wait();
 			} catch (InterruptedException ie) {
 				AndrewsProcess.defaultInterruptedExceptionHandling(ie);
 			}
 		}
-		this.buffer=value;
-		this.full=true;
+		this.buffer[this.r]=value;
+		this.r=(this.r + 1)%GlobalProgramState.n;
+		++this.cnt;
 		this.notifyAll();
 	}
 	
-	public synchronized int consume() {
-		while (!full) {
+	public synchronized int fetch() {
+		while (this.cnt==0) {
 			try {
 				this.wait();
 			} catch (InterruptedException ie) {
@@ -49,9 +47,11 @@ public class SingleBufferMonitor {
 			}
 			
 		}
-		this.full=false;
+		final int value=this.buffer[this.f];
+		this.f=(this.f + 1) % GlobalProgramState.n;
+		--this.cnt;
 		this.notifyAll();
-		return this.buffer;
+		return value;
 	}
 
 }
