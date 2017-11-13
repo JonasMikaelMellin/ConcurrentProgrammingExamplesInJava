@@ -83,7 +83,7 @@
 
 %%% The "real" document content comes below...
 
-\title{A Java Library for Concurrent Programming at Novice/Advanced Beginner Level\thanks{This document was produced with \LaTeX}\\Version 1.0}
+\title{A Java Library for Concurrent Programming at Novice/Advanced Beginner Level\thanks{This document was produced with \LaTeX}\\Version 1.1}
 \author{Jonas Mellin}
 %\date{} % Activate to display a given date or no date (if empty),
          % otherwise the current date is printed 
@@ -103,7 +103,7 @@ The Java API is inspired by the SR programming language, a pedagogical language 
 
 The busy-wait solution for a two-process tiebreaker algorithm is found in figure~\ref{fig:tieBreakerProcess1} and in figure~\ref{fig:tieBreakerProcess2}. First, this is an implementation of the interface Runnable in Java, which is used to specify the code of a thread. When a thread is created, an instance of a Runnable object can be passed as an argument. When the thread is started, the method \emph{ run()} is executed until termination. In this example, the processes does not terminate. At line 1, the specification "implements Runnable" means that objects of the class TwoProcessTieBreakerRunnable1 can be treated as a Runnable objects and are required to define the \emph{ run()} method. At line 4-5, the \emph{ run()} method is declared; the keyword \emph{@Override} means that this overrides the default declaration in the Runnable interface and the \emph{public  void {\bfseries run()}} means that the {\bfseries run()} method is defined as open for access to all other objects and that it does not return any value. 
 
-In Java, there is no global variables. Instead, static member variables of a class are used. In all examples in this document, there is a class named {\bfseries GlobalProgramState} that contains all global variables (i.e., accessible by all processes in a program) as public static member variables (as defined in lines 3-5 in figure~\ref{fig:tieBreakerGPS}). To access the global variables, prefix the variable with the class name {\bfseries GlobalProgramState} as in line 7 and 8.
+In Java, there is no global variables. Instead, static member variables of a class are used. In all examples in this document, there is a class named {\bfseries GlobalProgramState} that contains all global variables (i.e., accessible by all processes in a program) as public static member variables (as defined in lines 3-5 in figure~\ref{fig:tieBreakerGPS}). Note that they are also declared to be volatile to handle the situation when processes run on separate cores; this is done in order to guarantee that all caches are flushed to the main memory. To access the global variables, prefix the variable with the class name {\bfseries GlobalProgramState} as in line 7 and 8.
 
 On line 10-12, the busy wait loop of the two process tie breaker are found. Process 1 continues to iterate as long as the global variable {\bfseries in2} is true and {\bfseries last} is equivalent to 1. On line 11, how to make a process sleep for a minimum delay is called. 
 
@@ -184,8 +184,8 @@ As mentioned, Java's default communication and synchronization mechanism is moni
 
 \lstset{inputpath=c:/git/IT325G/IT325G/examples/se/his/iit/it325g/examples/monitors/multipleProducerConsumerSingleBuffer}
 \begin{figure}[ht]
-\lstinputlisting[language=Java,linerange=20-54]{SingleBufferMonitor.java}
-\caption{SingleBufferMonitor of Producer/Consumer with a single buffer, based on monitors}
+\lstinputlisting[language=Java,linerange=22-57]{SingleBufferMonitor.java}
+\caption{SingleBufferMonitor of Producer/Consumer with a n-size buffer, based on monitors}
 \label{fig:pcsbsbm-monitor}
 \end{figure}
 
@@ -206,13 +206,13 @@ On line 21-33, the \emph{consume()} method is defined. It is similar to the \emp
 The declaration of a singleton object for the singleton monitor is found at line 2 in figure~\ref{fig:pcsbgps-monitor}. This replaces line 2-5 in figure~\ref{fig:pcsbgps}. The keyword {\bfseries static} guarantees that one, and only one, object of this kind is assigned to the variable \emph{buffer}. Apart from this, the example in figure~\ref{fig:pcsbgps} is similar to figure~\ref{fig:pcsbgps-monitor}.
 
 \begin{figure}[ht]
-\lstinputlisting[language=Java,linerange=21-46]{Producer.java}
+\lstinputlisting[language=Java,linerange=23-46]{Producer.java}
 \caption{Producer of Producer/Consumer with a single buffer, based on monitors}
 \label{fig:pcsbproc-monitor}
 \end{figure}
 
 \begin{figure}[ht]
-\lstinputlisting[language=Java,linerange=21-46]{Consumer.java}
+\lstinputlisting[language=Java,linerange=23-46]{Consumer.java}
 \caption{Consumer of Producer/Consumer with a single buffer, based on monitors}
 \label{fig:pcsbproc-monitor}
 \end{figure}
