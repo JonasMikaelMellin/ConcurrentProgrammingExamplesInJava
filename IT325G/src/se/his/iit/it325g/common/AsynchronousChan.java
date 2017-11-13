@@ -29,8 +29,8 @@ public class AsynchronousChan<T> extends Chan<T> {
 		while (this.queue.remainingCapacity() <= 0) {
 			try {
 				this.wait();
-			} catch (InterruptedException e) {
-				// hide interrupts
+			} catch (InterruptedException interruptedException) {
+				AndrewsProcess.defaultInterruptedExceptionHandling(interruptedException);
 			}
 		}
 
@@ -43,12 +43,13 @@ public class AsynchronousChan<T> extends Chan<T> {
 
 		// block until there is a result
 
+
 		T result = this.queue.poll();
 		while (result == null) {
 			try {
 				this.wait();
-			} catch (InterruptedException e) {
-				// hide interrupts
+			} catch (InterruptedException interruptedException) {
+				AndrewsProcess.defaultInterruptedExceptionHandling(interruptedException);
 			}
 			result = this.queue.poll();
 		}

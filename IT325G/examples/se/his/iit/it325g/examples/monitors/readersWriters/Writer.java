@@ -14,29 +14,28 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package se.his.iit.it325g.examples.semaphores.producerConsumerBoundedBuffer;
+package se.his.iit.it325g.examples.monitors.readersWriters;
 
-
+import java.util.Random;
 
 import se.his.iit.it325g.common.AndrewsProcess;
 
-/**
- * Consumer process in producer/consumer with bounded buffer. Single producer/single consumer.
- * @author melj
- *
- */
-
-public class Consumer implements Runnable {
+public class Writer implements Runnable {
 
 
 	@Override
 	public void run() {
+		Random r=new Random(AndrewsProcess.currentAndrewsProcessId());
 		while(true) {
-			GlobalProgramState.full.P();
-			int value=GlobalProgramState.buffer[GlobalProgramState.front];
-			GlobalProgramState.front=(GlobalProgramState.front+1)%GlobalProgramState.n;			
-			GlobalProgramState.empty.V();
-			AndrewsProcess.uninterruptibleMinimumDelay(10);
+			System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+": requests write");
+			GlobalProgramState.buffer.requestWrite();
+			System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+": was granted a write");
+			AndrewsProcess.uninterruptibleMinimumDelay(Math.abs(r.nextInt()%1000));
+			System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+": release write ");
+			GlobalProgramState.buffer.releaseWrite();
+			System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+": write was released");
+			AndrewsProcess.uninterruptibleMinimumDelay(Math.abs(r.nextInt()%1000));
+
 
 		}
 	}

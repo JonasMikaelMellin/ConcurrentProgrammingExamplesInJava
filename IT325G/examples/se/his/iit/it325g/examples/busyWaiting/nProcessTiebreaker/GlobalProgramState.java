@@ -16,15 +16,16 @@
 
 package se.his.iit.it325g.examples.busyWaiting.nProcessTiebreaker;
 
-import java.util.concurrent.Semaphore;
+
 
 import se.his.iit.it325g.common.AndrewsProcess;
 import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
 
 public class GlobalProgramState {
-	public static int n=10;
-	public static int in[]=new int[n];
-	public static int last[]=new int[n];
+	public volatile static int n=10;
+	public volatile static int in[]=new int[n];
+	public volatile static int last[]=new int[n];
+	
 	public static void main(String argv[]) {
 		
 		System.out.print(AndrewsProcess.licenseText());

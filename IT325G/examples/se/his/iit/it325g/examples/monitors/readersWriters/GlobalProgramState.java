@@ -14,44 +14,30 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+package se.his.iit.it325g.examples.monitors.readersWriters;
 
-package se.his.iit.it325g.examples.monitors.multipleProducerConsumerSingleBuffer;
 
 import se.his.iit.it325g.common.AndrewsProcess;
+import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
 
-public class SingleBufferMonitor {
-	private int buffer;
-	private boolean full=false;
+public class GlobalProgramState {
+	public static ReadWriteController buffer=new ReadWriteController();
 
-	public SingleBufferMonitor() {
-	}
-	
-	public synchronized void produce(int value) {
-		while(full) {
-			try {
-				this.wait();
-			} catch (InterruptedException ie) {
-				AndrewsProcess.defaultInterruptedExceptionHandling(ie);
-			}
+	public static void main(String argv[]) {
+		
+		System.out.print(AndrewsProcess.licenseText());
+
+		RunnableSpecification rs[]=new RunnableSpecification[2];
+		rs[0]=new RunnableSpecification(Writer.class,10);
+		rs[1]=new RunnableSpecification(Reader.class,20);
+		try {
+			AndrewsProcess process[]=AndrewsProcess.andrewsProcessFactory(rs);
+			AndrewsProcess.startAndrewsProcesses(process);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
 		}
-		this.buffer=value;
-		this.full=true;
-		this.notifyAll();
-	}
-	
-	public synchronized int consume() {
-		while (!full) {
-			try {
-				this.wait();
-			} catch (InterruptedException ie) {
-				AndrewsProcess.defaultInterruptedExceptionHandling(ie);
-
-			}
-			
-		}
-		this.full=false;
-		this.notifyAll();
-		return this.buffer;
 	}
 
 }

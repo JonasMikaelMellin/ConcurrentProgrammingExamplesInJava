@@ -17,7 +17,6 @@
 package se.his.iit.it325g.common;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import se.his.iit.it325g.common.rendezvous.Rendezvous;
@@ -176,7 +175,7 @@ public class AndrewsProcess extends Thread {
 				result[i] = new AndrewsProcess(cls.newInstance());
 				if (result[i].getRunnable() instanceof Rendezvous) {
 					((Rendezvous) (result[i].getRunnable())).initialize();
-					;
+					
 				}
 				++i;
 			}
@@ -407,7 +406,8 @@ public class AndrewsProcess extends Thread {
 		while (difference > 0) {
 			try {
 				Thread.sleep(difference);
-			} catch (InterruptedException ie) {
+			} catch (InterruptedException unimportant) {
+				AndrewsProcess.defaultInterruptedExceptionHandling(unimportant);
 			}
 			difference = millis + initialMillis - System.currentTimeMillis();
 		}
@@ -418,6 +418,13 @@ public class AndrewsProcess extends Thread {
 	 */
 	public synchronized final Runnable getRunnable() {
 		return runnable;
+	}
+
+
+	
+	public static void  defaultInterruptedExceptionHandling(final InterruptedException interruptedException) {
+		System.err.println("Thread interrupted, exiting");
+		System.exit(0);
 	}
 
 }

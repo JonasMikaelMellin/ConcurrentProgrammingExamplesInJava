@@ -20,8 +20,8 @@ package se.his.iit.it325g.examples.messagePassing.mergeSorter;
 
 import java.util.List;
 import java.util.Random;
-import java.util.Vector;
-import java.util.stream.Collector;
+
+
 import java.util.stream.Collectors;
 
 import se.his.iit.it325g.common.AndrewsProcess;

@@ -1,6 +1,6 @@
 package se.his.iit.it325g.examples.messagePassing.peerValueExchange.symmetric;
 
-import java.util.Random;
+
 
 import se.his.iit.it325g.common.AndrewsProcess;
 
@@ -20,7 +20,7 @@ public class PeerRunnable implements Runnable {
 			if (j==AndrewsProcess.currentAndrewsProcessId()) {
 				continue;
 			}
-			GlobalProgramState.values.get(j).send(this.v);;			
+			GlobalProgramState.values.get(j).send(this.v);			
 		}
 		smallest=largest=this.v;
 		for (int j=0; j<GlobalProgramState.numberOfPeers-1; ++j) {

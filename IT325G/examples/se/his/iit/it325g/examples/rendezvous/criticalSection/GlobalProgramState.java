@@ -18,12 +18,12 @@ package se.his.iit.it325g.examples.rendezvous.criticalSection;
 
 
 
-import se.his.iit.it325g.common.AsynchronousChan;
-import se.his.iit.it325g.common.Chan;
+
+
 import se.his.iit.it325g.common.AndrewsProcess;
 import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
 import se.his.iit.it325g.common.rendezvous.Entry;
-import se.his.iit.it325g.common.Char;
+
 
 public class GlobalProgramState {
 	public static final int numberOfClients = 3;

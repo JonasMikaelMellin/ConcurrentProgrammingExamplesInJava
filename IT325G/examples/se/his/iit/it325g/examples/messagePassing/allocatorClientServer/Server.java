@@ -3,7 +3,6 @@ package se.his.iit.it325g.examples.messagePassing.allocatorClientServer;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 

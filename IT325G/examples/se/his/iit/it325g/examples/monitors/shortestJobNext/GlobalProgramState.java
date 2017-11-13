@@ -14,44 +14,29 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+package se.his.iit.it325g.examples.monitors.shortestJobNext;
 
-package se.his.iit.it325g.examples.monitors.multipleProducerConsumerSingleBuffer;
 
 import se.his.iit.it325g.common.AndrewsProcess;
+import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
 
-public class SingleBufferMonitor {
-	private int buffer;
-	private boolean full=false;
+public class GlobalProgramState {
+	public static volatile ShortestJobNextMonitor shortestJobNextMonitor=new ShortestJobNextMonitor();
 
-	public SingleBufferMonitor() {
-	}
-	
-	public synchronized void produce(int value) {
-		while(full) {
-			try {
-				this.wait();
-			} catch (InterruptedException ie) {
-				AndrewsProcess.defaultInterruptedExceptionHandling(ie);
-			}
+	public static void main(String argv[]) {
+		
+		System.out.print(AndrewsProcess.licenseText());
+
+		RunnableSpecification rs[]=new RunnableSpecification[1];
+		rs[0]=new RunnableSpecification(ClientSimulation.class,10);
+		try {
+			AndrewsProcess process[]=AndrewsProcess.andrewsProcessFactory(rs);
+			AndrewsProcess.startAndrewsProcesses(process);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
 		}
-		this.buffer=value;
-		this.full=true;
-		this.notifyAll();
-	}
-	
-	public synchronized int consume() {
-		while (!full) {
-			try {
-				this.wait();
-			} catch (InterruptedException ie) {
-				AndrewsProcess.defaultInterruptedExceptionHandling(ie);
-
-			}
-			
-		}
-		this.full=false;
-		this.notifyAll();
-		return this.buffer;
 	}
 
 }

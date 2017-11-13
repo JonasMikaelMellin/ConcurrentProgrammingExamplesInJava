@@ -74,7 +74,7 @@ public class ClientSimulation implements Runnable {
 					break;
 				case 1: 
 					this.allocatedResources.remove(((ClientRequestReleaseResource)clientRequest).getUnitId());
-					System.out.println("\tClient "+AndrewsProcess.currentAndrewsProcessId()+" Release request of "+((ClientRequestReleaseResource)clientRequest).getUnitId()+" completed with success="+((ServerResponse)serverResponse).isSuccess());
+					System.out.println("\tClient "+AndrewsProcess.currentAndrewsProcessId()+" Release request of "+((ClientRequestReleaseResource)clientRequest).getUnitId()+" completed with success="+serverResponse.isSuccess());
 					break;
 				default:
 					throw new IllegalStateException("We should not be in this state, something severe happened");

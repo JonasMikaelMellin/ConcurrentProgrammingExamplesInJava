@@ -38,7 +38,7 @@ public abstract class Ordering<T extends Entry> extends Observer implements Eval
 			throw new IllegalArgumentException("Entry "+entry+" does not belong to Rendezvous "+this.getRendezvous());
 		}
 
-		entrySet.add((T) entry);
+		entrySet.add( entry);
 	}
 	
 }

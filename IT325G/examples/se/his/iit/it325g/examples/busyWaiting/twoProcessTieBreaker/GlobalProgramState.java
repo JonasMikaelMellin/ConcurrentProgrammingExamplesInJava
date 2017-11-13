@@ -21,9 +21,9 @@ import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
 
 public class GlobalProgramState {
 	
-	static boolean in1=false;
-	static boolean in2=false;
-	static int last=1;
+	public static volatile boolean in1=false;
+	public static volatile boolean in2=false;
+	public static volatile int last=1;
 
 
 	public static void main(String argv[]) {

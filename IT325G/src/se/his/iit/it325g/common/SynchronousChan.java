@@ -18,7 +18,7 @@ package se.his.iit.it325g.common;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
+
 
 public class SynchronousChan<T> extends Chan<T> {
 	private T value;
@@ -40,8 +40,8 @@ public class SynchronousChan<T> extends Chan<T> {
 						.currentThread()).equals(this.waitingSenders.peek()))) {
 			try {
 				this.wait();
-			} catch (InterruptedException e) {
-
+			} catch (InterruptedException interruptedException) {
+				AndrewsProcess.defaultInterruptedExceptionHandling(interruptedException);
 			}
 		}
 		if (((AndrewsProcess) Thread.currentThread())
@@ -54,8 +54,8 @@ public class SynchronousChan<T> extends Chan<T> {
 		while (!this.receiverEntered) {
 			try {
 				this.wait();
-			} catch (InterruptedException e) {
-
+			} catch (InterruptedException interruptedException) {
+				AndrewsProcess.defaultInterruptedExceptionHandling(interruptedException);
 			}
 		}
 		this.senderExiting = true;
@@ -63,8 +63,8 @@ public class SynchronousChan<T> extends Chan<T> {
 		while (!this.receiverExiting) {
 			try {
 				this.wait();
-			} catch (InterruptedException e) {
-
+			} catch (InterruptedException interruptedException) {
+				AndrewsProcess.defaultInterruptedExceptionHandling(interruptedException);
 			}
 		}
 		this.senderExiting = false;
@@ -84,7 +84,8 @@ public class SynchronousChan<T> extends Chan<T> {
 						.currentThread()).equals(this.waitingReceivers.peek()))) {
 			try {
 				this.wait();
-			} catch (InterruptedException e) {
+			} catch (InterruptedException interruptedException) {
+				AndrewsProcess.defaultInterruptedExceptionHandling(interruptedException);
 			}
 		}
 		if (((AndrewsProcess) Thread.currentThread())
@@ -95,7 +96,8 @@ public class SynchronousChan<T> extends Chan<T> {
 		while (!this.senderEntered) {
 			try {
 				this.wait();
-			} catch (InterruptedException e) {
+			} catch (InterruptedException interruptedException) {
+				AndrewsProcess.defaultInterruptedExceptionHandling(interruptedException);
 			}
 		}
 		result = this.value;
@@ -103,7 +105,8 @@ public class SynchronousChan<T> extends Chan<T> {
 		while (!this.senderExiting) {
 			try {
 				this.wait();
-			} catch (InterruptedException e) {
+			} catch (InterruptedException interruptedException) {
+				AndrewsProcess.defaultInterruptedExceptionHandling(interruptedException);
 			}
 		}
 		this.receiverExiting = false;

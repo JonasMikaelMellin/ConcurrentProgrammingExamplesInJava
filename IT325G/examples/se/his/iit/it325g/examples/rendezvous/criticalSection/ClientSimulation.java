@@ -3,7 +3,7 @@ package se.his.iit.it325g.examples.rendezvous.criticalSection;
 import java.util.Random;
 
 import se.his.iit.it325g.common.AndrewsProcess;
-import se.his.iit.it325g.common.rendezvous.Entry;
+
 
 public class ClientSimulation implements Runnable {
 

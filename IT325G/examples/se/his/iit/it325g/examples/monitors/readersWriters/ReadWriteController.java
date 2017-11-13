@@ -14,44 +14,50 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+// Based on figure 5.5 on page 216 in the course book.
 
-package se.his.iit.it325g.examples.monitors.multipleProducerConsumerSingleBuffer;
+
+package se.his.iit.it325g.examples.monitors.readersWriters;
 
 import se.his.iit.it325g.common.AndrewsProcess;
 
-public class SingleBufferMonitor {
-	private int buffer;
-	private boolean full=false;
-
-	public SingleBufferMonitor() {
-	}
+public class ReadWriteController {
+	private int numberOfReaders=0;
+	private int numberOfWriters=0;
 	
-	public synchronized void produce(int value) {
-		while(full) {
+
+	public ReadWriteController() {
+	}
+	public synchronized void requestRead() {
+		while (this.numberOfWriters>0) {
 			try {
 				this.wait();
-			} catch (InterruptedException ie) {
-				AndrewsProcess.defaultInterruptedExceptionHandling(ie);
+			} catch (InterruptedException e) {
+				AndrewsProcess.defaultInterruptedExceptionHandling(e);
 			}
 		}
-		this.buffer=value;
-		this.full=true;
-		this.notifyAll();
+		this.numberOfReaders++;
 	}
-	
-	public synchronized int consume() {
-		while (!full) {
+	public synchronized void releaseRead() {
+		this.numberOfReaders--;
+		if (this.numberOfReaders==0) {
+			this.notifyAll();
+		}
+	}
+	public synchronized void requestWrite() {
+		while (this.numberOfReaders>0|| this.numberOfWriters>0) {
 			try {
 				this.wait();
-			} catch (InterruptedException ie) {
-				AndrewsProcess.defaultInterruptedExceptionHandling(ie);
-
+			} catch (InterruptedException e) {
+				AndrewsProcess.defaultInterruptedExceptionHandling(e);
 			}
-			
 		}
-		this.full=false;
-		this.notifyAll();
-		return this.buffer;
+		this.numberOfWriters++;
 	}
+	public synchronized void releaseWrite() {
+		this.numberOfWriters--;
+		this.notifyAll();
+	}
+
 
 }

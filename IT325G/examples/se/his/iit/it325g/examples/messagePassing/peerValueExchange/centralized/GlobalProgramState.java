@@ -27,7 +27,7 @@ import se.his.iit.it325g.common.AsynchronousChan;
 import se.his.iit.it325g.common.Chan;
 import se.his.iit.it325g.common.AndrewsProcess;
 import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
-import se.his.iit.it325g.common.Char;
+
 
 public class GlobalProgramState {
 	public static Chan<Integer> values=new AsynchronousChan<Integer>();

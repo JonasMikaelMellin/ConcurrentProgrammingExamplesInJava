@@ -16,10 +16,10 @@
 
 package se.his.iit.it325g.examples.semaphores.producerConsumerBoundedBuffer;
 
-import java.util.Arrays;
 
 
-import se.his.iit.it325g.common.AndrewsProcess;
+
+
 
 /**
  * Producer process in producer/consumer with bounded buffer. Single producer/single consumer.

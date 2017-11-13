@@ -24,7 +24,7 @@ import se.his.iit.it325g.common.AsynchronousChan;
 import se.his.iit.it325g.common.Chan;
 import se.his.iit.it325g.common.AndrewsProcess;
 import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
-import se.his.iit.it325g.common.Char;
+
 
 public class GlobalProgramState {
 	public static Vector<Chan<ServerResponse>> reply=new Vector<Chan<ServerResponse>>();

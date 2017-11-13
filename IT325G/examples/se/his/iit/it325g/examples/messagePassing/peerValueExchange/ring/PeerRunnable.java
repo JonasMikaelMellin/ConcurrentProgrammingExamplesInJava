@@ -1,6 +1,6 @@
 package se.his.iit.it325g.examples.messagePassing.peerValueExchange.ring;
 
-import java.util.Random;
+
 
 import se.his.iit.it325g.common.AndrewsProcess;
 
@@ -19,7 +19,7 @@ public class PeerRunnable implements Runnable {
 		SmallestAndLargestValue salv=GlobalProgramState.values.get(AndrewsProcess.currentAndrewsProcessId()).receive();
 		final int smallest=(v<salv.getSmallest()?v:salv.getSmallest());
 		final int largest=(v>salv.getLargest()?v:salv.getLargest());
-		GlobalProgramState.values.get((AndrewsProcess.currentAndrewsProcessId()+1)%GlobalProgramState.numberOfPeers).send(new SmallestAndLargestValue(smallest,largest));;
+		GlobalProgramState.values.get((AndrewsProcess.currentAndrewsProcessId()+1)%GlobalProgramState.numberOfPeers).send(new SmallestAndLargestValue(smallest,largest));
 		SmallestAndLargestValue salv2=GlobalProgramState.values.get(AndrewsProcess.currentAndrewsProcessId()).receive();
 		GlobalProgramState.values.get((AndrewsProcess.currentAndrewsProcessId()+1)%GlobalProgramState.numberOfPeers).send(salv2);
 		System.out.println("Peer "+AndrewsProcess.currentAndrewsProcessId()+" smallest ="+salv2.getSmallest()+", and largest = "+salv2.getLargest());

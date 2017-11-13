@@ -68,7 +68,7 @@ public class ClientSimulation implements Runnable {
 					System.out.println("\tClient "+AndrewsProcess.currentAndrewsProcessId()+" Request resulted in "+((ServerResponseWithValue)serverResponse).getValue());
 					break;
 				case 1: case 2:
-					System.out.println("\tClient "+AndrewsProcess.currentAndrewsProcessId()+" Request completed with success="+((ServerResponse)serverResponse).isSuccess());
+					System.out.println("\tClient "+AndrewsProcess.currentAndrewsProcessId()+" Request completed with success="+serverResponse.isSuccess());
 					break;
 				default:
 					throw new IllegalStateException("We should not be in this state, something severe happened");

@@ -18,7 +18,7 @@
 
 package se.his.iit.it325g.examples.messagePassing.mergeSorter;
 
-import se.his.iit.it325g.common.AndrewsProcess;
+
 
 public class IntegerSink implements Runnable {
 

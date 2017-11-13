@@ -51,7 +51,7 @@ public class FactorialMonitor {
 				try {
 					this.wait();
 				} catch (InterruptedException ie) {
-					// do nothing
+					AndrewsProcess.defaultInterruptedExceptionHandling(ie);
 				}
 			}
 			this.notifyAll();

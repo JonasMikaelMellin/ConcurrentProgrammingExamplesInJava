@@ -16,10 +16,8 @@
 
 package se.his.iit.it325g.examples.busyWaiting.nProcessBakeryAlgorithm;
 
-import java.lang.reflect.Array;
+
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.stream.IntStream;
 
 import se.his.iit.it325g.common.AndrewsProcess;
 

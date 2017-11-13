@@ -22,8 +22,8 @@ import se.his.iit.it325g.common.AndrewsProcess;
 
 public class GlobalProgramState {
 
-	static int n=10;
-	static int turn[]=IntStream.generate(() -> -1).limit(n).toArray(); // defaults to n * -1
+	public static volatile int n=10;
+	public static volatile int turn[]=IntStream.generate(() -> -1).limit(n).toArray(); // defaults to n * -1
 
 	public static void main(String argv[]) {
 		
