@@ -16,7 +16,7 @@
 
 // based on figure 7.13
 
-package se.his.iit.it325g.examples.messagePassing.diningPhilosophers;
+package se.his.iit.it325g.examples.messagePassing.token.diningPhilosophers;
 
 
 
