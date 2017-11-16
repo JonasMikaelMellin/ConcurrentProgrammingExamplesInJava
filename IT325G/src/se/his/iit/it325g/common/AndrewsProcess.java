@@ -31,7 +31,7 @@ import se.his.iit.it325g.common.rendezvous.Rendezvous;
  */
 public class AndrewsProcess extends Thread {
 
-	static private int nextIdentity = 0;
+	static volatile private int nextIdentity = 0;
 	static private ConcurrentHashMap<Thread, Integer> t2i = new ConcurrentHashMap<Thread, Integer>();
 	static private ConcurrentHashMap<Class<?>, ConcurrentHashMap<Thread, Integer>> c2t2i = new ConcurrentHashMap<Class<?>, ConcurrentHashMap<Thread, Integer>>(); // relative
 																																									// identity
