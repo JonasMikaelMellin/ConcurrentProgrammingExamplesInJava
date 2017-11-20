@@ -14,7 +14,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-// based on figure 7.13
+
 
 
 package se.his.iit.it325g.examples.messagePassing.token.producerConsumer;
