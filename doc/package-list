@@ -1,3 +1,4 @@
+
 se.his.iit.it325g.common
 se.his.iit.it325g.common.rendezvous
 se.his.iit.it325g.examples.busyWaiting.nProcessBakeryAlgoBoundedDom
@@ -5,12 +6,17 @@ se.his.iit.it325g.examples.busyWaiting.nProcessBakeryAlgorithm
 se.his.iit.it325g.examples.busyWaiting.nProcessTiebreaker
 se.his.iit.it325g.examples.busyWaiting.twoProcessTieBreaker
 se.his.iit.it325g.examples.messagePassing.allocatorClientServer
+se.his.iit.it325g.examples.messagePassing.asynchMessExchange
+se.his.iit.it325g.examples.messagePassing.fileSessionClientServer
 se.his.iit.it325g.examples.messagePassing.filterProcessAssemblingLinesOfCharacters
 se.his.iit.it325g.examples.messagePassing.mergeSorter
 se.his.iit.it325g.examples.messagePassing.peerValueExchange.centralized
 se.his.iit.it325g.examples.messagePassing.peerValueExchange.ring
 se.his.iit.it325g.examples.messagePassing.peerValueExchange.symmetric
 se.his.iit.it325g.examples.messagePassing.simpleClientServer
+se.his.iit.it325g.examples.messagePassing.synchMessExchange
+se.his.iit.it325g.examples.messagePassing.token.diningPhilosophers
+se.his.iit.it325g.examples.messagePassing.token.producerConsumer
 se.his.iit.it325g.examples.monitors.diningPhilosophers
 se.his.iit.it325g.examples.monitors.multipleProducerConsumerNBuffer
 se.his.iit.it325g.examples.monitors.multipleProducerConsumerSingleBuffer
