@@ -14,7 +14,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package se.his.iit.it325g.examples.rendezvous.shortestJobNext;
+package se.his.iit.it325g.examples.rendezvous.resourceAllocatorSJN;
 
 
 import se.his.iit.it325g.common.AndrewsProcess;
@@ -22,6 +22,8 @@ import se.his.iit.it325g.common.AndrewsProcess.RunnableSpecification;
 
 public class GlobalProgramState {
 	public static volatile ShortestJobNextAccess shortestJobNextAccess;
+	public static int numberOfResources=5;
+	public static int numberOfClients=10;
 
 	public static void main(String argv[]) {
 		
@@ -29,7 +31,7 @@ public class GlobalProgramState {
 
 		RunnableSpecification rs[]=new RunnableSpecification[2];
 		rs[0]=new RunnableSpecification(ShortestJobNextServer.class,1);
-		rs[1]=new RunnableSpecification(ClientSimulation.class,10);
+		rs[1]=new RunnableSpecification(ClientSimulation.class,numberOfClients);
 		try {
 			AndrewsProcess process[]=AndrewsProcess.andrewsProcessFactory(rs);
 			GlobalProgramState.shortestJobNextAccess=new ShortestJobNextAccess(process[0]);

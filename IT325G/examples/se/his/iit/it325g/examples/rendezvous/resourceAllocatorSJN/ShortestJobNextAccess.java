@@ -1,7 +1,8 @@
-package se.his.iit.it325g.examples.rendezvous.shortestJobNext;
+package se.his.iit.it325g.examples.rendezvous.resourceAllocatorSJN;
 
 import se.his.iit.it325g.common.AndrewsProcess;
 import se.his.iit.it325g.common.rendezvous.Entry;
+import se.his.iit.it325g.common.rendezvous.Result;
 import se.his.iit.it325g.examples.rendezvous.readersWriters.ReaderWriterAccessServer;
 
 public class ShortestJobNextAccess {
@@ -19,12 +20,13 @@ public class ShortestJobNextAccess {
 		
 	}
 	
-	public void request(Integer priority) {
+	public Integer request(Integer priority) {
 		this.request_Entry.call(priority);
+		return ((Result<Integer>)this.request_Entry.getAction().getResult()).getObject();
 		
 	}
-	public void release() {
-		this.release_Entry.call();
+	public void release(Integer unit) {
+		this.release_Entry.call(unit);
 		
 	}
 

@@ -14,10 +14,15 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package se.his.iit.it325g.examples.rendezvous.shortestJobNext;
+package se.his.iit.it325g.examples.rendezvous.resourceAllocatorSJN;
 
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import se.his.iit.it325g.common.AndrewsProcess;
 import se.his.iit.it325g.common.rendezvous.Action;
@@ -45,12 +50,14 @@ public class ShortestJobNextServer extends Rendezvous {
 			RendezvousCallImplementation rendezvousCallImplementation) {
 		super(name, rendezvousCallImplementation);
 	}
-	private boolean free=true;
+	private int serverValue=0;
+	private HashSet<Integer> unitSet=new HashSet<Integer>();
 	private Result<Boolean> result=new Result<Boolean>(true);
 
 	
 	public ShortestJobNextServer() {
 		super("Shortest Job Next Server",new RendezvousCallMonitorImplementation());
+		this.unitSet.addAll(IntStream.range(0, GlobalProgramState.numberOfResources).boxed().collect(Collectors.toList()));
 	}
 	
 	/* (non-Javadoc)
@@ -67,7 +74,7 @@ public class ShortestJobNextServer extends Rendezvous {
 			@Override
 			public boolean evaluate(Object[] parameter) {
 				
-				return ShortestJobNextServer.this.free;
+				return ShortestJobNextServer.this.unitSet.size()>0;
 			}
 		};
 		
@@ -77,8 +84,12 @@ public class ShortestJobNextServer extends Rendezvous {
 			 */
 			@Override
 			public boolean evaluate(Object[] parameter) {
+				final Integer unit=ShortestJobNextServer.this.unitSet.iterator().next();
+				ShortestJobNextServer.this.unitSet.remove(unit);
 				
-				return ShortestJobNextServer.this.free=false;
+				this.setResult(new Result<Integer>(unit));
+				
+				return true;
 			}
 		};
 		
@@ -111,7 +122,7 @@ public class ShortestJobNextServer extends Rendezvous {
 			@Override
 			public boolean evaluate(Object[] parameter) {
 				// set locked flag to false
-				free=true;
+				ShortestJobNextServer.this.unitSet.add(((Integer)parameter[0]));
 				// set the result of the action to true
 				this.setResult(result);
 				// return that the evaluation of the action was successful
@@ -122,9 +133,7 @@ public class ShortestJobNextServer extends Rendezvous {
 		Entry release_Entry=new Entry("release_Entry",this,new GuardNone(this),release_Action,orderingDefault) {
 			@Override
 			public Result<?> call(Object... object) {
-				if (object.length>0) {
-					throw new IllegalArgumentException("No parameters should be provided to entry exitCriticalSection");
-				}
+				checkParameter(object);
 				return ShortestJobNextServer.this.call(this, object);
 			}
 		};

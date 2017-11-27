@@ -17,7 +17,7 @@ public abstract class Action extends Observer implements Evaluation {
 		}
 		entrySet.add(entry);
 	}
-	protected Result<?> getResult() {
+	public Result<?> getResult() {
 		return this.result;
 	}
 	protected void setResult(Result<?> result) {
