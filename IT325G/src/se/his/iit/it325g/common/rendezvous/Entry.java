@@ -30,7 +30,7 @@ public abstract class Entry extends Observer implements Evaluation {
 		this.ordering.addEntry(this);
 		rendezvous.addEntry(this);
 	}
-	public boolean evaluate() {
+	public boolean evaluate(Object[] parameter) {
 		return false;
 	}
 	/* (non-Javadoc)

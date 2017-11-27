@@ -1,116 +1,90 @@
 package se.his.iit.it325g.common.rendezvous;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
 
 import se.his.iit.it325g.common.AndrewsProcess;
 
 public abstract class Rendezvous implements Runnable {
-	private String name;
-	private HashMap<String,Entry> entryMap=new HashMap<String,Entry>();
-	private  HashMap<String,Queue<AndrewsProcess>> s2eq=new HashMap<String,Queue<AndrewsProcess>>();
-	
-	
-	/**
-	 * Enumeration, either FCFS or Ordered.
-	 * 
-	 * @author melj
-	 * 
-	 */
-	enum Order {
-		FIRST_COME_FIRST_SERVED, 
-		ORDERED 
-		
-		};
 
-	public Rendezvous(String name) {
+	protected String name;
+	private HashMap<String,Entry> entryMap = new HashMap<String,Entry>();
+	HashMap<String,Queue<QueuedAndrewsProcess>> s2eq = new HashMap<String,Queue<QueuedAndrewsProcess>>();
+	private RendezvousCallImplementation rendezvousCallImplementation;
+
+	/**
+		 * Enumeration, either FCFS or Ordered.
+		 * 
+		 * @author melj
+		 * 
+		 */
+		protected enum Order {
+			FIRST_COME_FIRST_SERVED, 
+			ORDERED 
+			
+			}
+
+	protected Rendezvous(String name, RendezvousCallImplementation rendezvousCallImplementation) {
 		if (name==null) {
 			throw new IllegalArgumentException("Rendezvous name cannot be null");
 		}
 		this.name=name;
+		this.rendezvousCallImplementation=rendezvousCallImplementation;
 	}
-	
-	
+
 	/**
 	 * @return the name
 	 */
-	public synchronized final String getName() {
+	public final synchronized String getName() {
 		return name;
 	}
 
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return String.format("Rendezvous [name=%s]", name);
 	}
-	
-	protected final synchronized Result<?> call(Entry entry) {
-		if (!entry.getRendezvous().equals(this)) {
-			throw new IllegalArgumentException("Entry "+entry+" does not belong to rendezvous "+this);
-		}
-		Result<?> result=null;
-		Queue<AndrewsProcess> eq=null;
-		if (!entry.getGuard().evaluate()) {
-			eq=s2eq.get(entry.getName());
-			if (eq==null) {
-				switch (entry.getOrdering().getOrder()) {
-				case FIRST_COME_FIRST_SERVED:
-					eq=new LinkedList<AndrewsProcess>();
-					break;
-				case ORDERED:
-					eq=new PriorityQueue<AndrewsProcess>(entry.getOrdering().getComparator());
-					break;
-				default:
-					throw new IllegalArgumentException("The alternatives "+entry.getOrdering().getOrder()+" is not implemented");				
-				}
 
-				s2eq.put(entry.getName(), eq);
-			}
-			eq.add(AndrewsProcess.currentAndrewsProcess());
-			boolean guardFlag=entry.getGuard().evaluate();
-			while (!guardFlag || (guardFlag && !AndrewsProcess.currentAndrewsProcess().equals(eq.peek()))) {
-				try {
-					this.wait();
-				} catch (InterruptedException interruptedException) {
-					AndrewsProcess.defaultInterruptedExceptionHandling(interruptedException);
-
-				}
-				guardFlag=entry.getGuard().evaluate();
-			}
-		}
-		if (eq!=null && AndrewsProcess.currentAndrewsProcess().equals(eq.peek())) {
-			eq.poll();
-		}
-		entry.getAction().evaluate();
-		this.notifyAll();
-		result=entry.getAction().getResult();
-		return result;
-	}
-
-
-	@Override
 	public void run() {
+		rendezvousCallImplementation.run();
 	}
 
+	public void initialize() {
+		this.rendezvousCallImplementation.setRendezvous(this);
+	}
 
-	public abstract void initialize();
-
-
-	final void addEntry(final Entry entry) {
+	protected final void addEntry(final Entry entry) {
 		this.entryMap.put(entry.getName(),entry);
 		
 	}
+
 	public final Entry getEntry(final String name) {
 		if (!this.entryMap.containsKey(name)) {
-			throw new IllegalArgumentException("Entry named"+name+" is not found");
+			throw new IllegalArgumentException("Entry named "+name+" is not found");
 		}
 		return this.entryMap.get(name);
 	}
-		
-	
+	public static Rendezvous createRendezevous(Class<?> cls, String name, RendezvousCallImplementation rendezvousCallImplementation) {
+		Constructor<?> constructor;
+		Rendezvous rendezvous=null;
+		try {
+			constructor = cls.getConstructor(String.class,RendezvousCallImplementation.class);
+			rendezvous=(Rendezvous) constructor.newInstance(name,rendezvousCallImplementation);
+		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			throw new IllegalStateException(e);
+		}
+		rendezvousCallImplementation.setRendezvous(rendezvous);
+		return rendezvous;
+	}
+	protected final Result<?> call(Entry entry, Object[] parameter) {
+		return this.rendezvousCallImplementation.call(entry, parameter);
+	}
+
+	public Set<Entry> getEntries() {
+		return (Set<Entry>) entryMap.values();
+	}
+
+
 }

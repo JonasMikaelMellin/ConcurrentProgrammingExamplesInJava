@@ -3,8 +3,8 @@ package se.his.iit.it325g.common.rendezvous;
 import java.util.Comparator;
 import java.util.HashSet;
 
-public abstract class Ordering<T extends Entry> extends Observer implements Evaluation {
-	private HashSet<T> entrySet=new HashSet<T>();
+public  class Ordering<T extends QueuedAndrewsProcess> extends Observer implements Evaluation {
+	private HashSet<Entry> entrySet=new HashSet<Entry>();
 	private Rendezvous.Order order;
 	private Comparator<T> comparator=null;
 	public Ordering(String name,Rendezvous rendezvous) {
@@ -17,7 +17,7 @@ public abstract class Ordering<T extends Entry> extends Observer implements Eval
 		this.comparator=comparator;
 	}
 	
-	public boolean evaluate() {
+	public boolean evaluate(Object[] parameter) {
 		return false;
 	}
 	/**
@@ -33,12 +33,12 @@ public abstract class Ordering<T extends Entry> extends Observer implements Eval
 		return comparator;
 	}
 	@SuppressWarnings("unchecked")
-	void addEntry(T entry) {
-		if (!entry.getRendezvous().equals(this.getRendezvous())) {
-			throw new IllegalArgumentException("Entry "+entry+" does not belong to Rendezvous "+this.getRendezvous());
+	void addEntry(Entry qap) {
+		if (!qap.getRendezvous().equals(this.getRendezvous())) {
+			throw new IllegalArgumentException("Entry "+qap+" does not belong to Rendezvous "+this.getRendezvous());
 		}
 
-		entrySet.add( entry);
+		entrySet.add( qap);
 	}
 	
 }

@@ -8,7 +8,7 @@ public abstract class Action extends Observer implements Evaluation {
 	public Action(String name,Rendezvous rendezvous) {
 		super(name,rendezvous);
 	}
-	public boolean evaluate() {
+	public boolean evaluate(Object[] parameter) {
 		return false;
 	}
 	void addEntry(Entry entry) {

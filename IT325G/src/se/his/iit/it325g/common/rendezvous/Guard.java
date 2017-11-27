@@ -13,7 +13,7 @@ public abstract class Guard extends Observer implements Evaluation {
 		}
 		this.entrySet.add(entry);
 	}
-	public boolean evaluate() {
+	public boolean evaluate(Object[] parameter) {
 		return false;
 	}		
 

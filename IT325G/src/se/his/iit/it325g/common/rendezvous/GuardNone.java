@@ -10,7 +10,7 @@ public class GuardNone extends Guard {
 	 * @see se.his.iit.it325g.common.rendezvous.Guard#evaluate()
 	 */
 	@Override
-	public boolean evaluate() {
+	public boolean evaluate(Object[] parameter) {
 		return true;
 	}
 

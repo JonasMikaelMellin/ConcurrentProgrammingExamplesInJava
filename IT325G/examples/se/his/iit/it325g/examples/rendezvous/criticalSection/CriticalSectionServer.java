@@ -6,6 +6,7 @@ import se.his.iit.it325g.common.rendezvous.Guard;
 import se.his.iit.it325g.common.rendezvous.GuardNone;
 import se.his.iit.it325g.common.rendezvous.OrderingDefault;
 import se.his.iit.it325g.common.rendezvous.Rendezvous;
+import se.his.iit.it325g.common.rendezvous.RendezvousCallMonitorImplementation;
 import se.his.iit.it325g.common.rendezvous.Result;
 
 public class CriticalSectionServer extends Rendezvous {
@@ -14,7 +15,7 @@ public class CriticalSectionServer extends Rendezvous {
 	private Result<Boolean> result=new Result<Boolean>(true);
 
 	public CriticalSectionServer() {
-		super("Critical section server");
+		super("Critical section server", new RendezvousCallMonitorImplementation());
 	}
 
 	@Override
@@ -23,8 +24,8 @@ public class CriticalSectionServer extends Rendezvous {
 		
 	}
 
-	@Override
 	public void initialize() {
+		super.initialize();
 		
 		// enter critical section entry
 		// enterCriticalSection[!locked] -> locked:=true
@@ -35,7 +36,7 @@ public class CriticalSectionServer extends Rendezvous {
 			 * @see se.his.iit.it325g.common.rendezvous.Guard#evaluate()
 			 */
 			@Override
-			public boolean evaluate() {
+			public boolean evaluate(Object[] parameter) {
 				return !locked;
 			}
 			
@@ -46,7 +47,7 @@ public class CriticalSectionServer extends Rendezvous {
 			 * @see se.his.iit.it325g.common.rendezvous.Action#evaluate()
 			 */
 			@Override
-			public boolean evaluate() {
+			public boolean evaluate(Object[] parameter) {
 				// set the locked flag to true
 				locked=true;
 				// set the result of the action to true
@@ -63,7 +64,7 @@ public class CriticalSectionServer extends Rendezvous {
 				if (object.length>0) {
 					throw new IllegalArgumentException("No parameters should be provided to entry enterCriticalSection");
 				}
-				return CriticalSectionServer.this.call(this);
+				return CriticalSectionServer.this.call(this, object);
 			}
 		};
 		
@@ -75,7 +76,7 @@ public class CriticalSectionServer extends Rendezvous {
 			 * @see se.his.iit.it325g.common.rendezvous.Action#evaluate()
 			 */
 			@Override
-			public boolean evaluate() {
+			public boolean evaluate(Object[] parameter) {
 				// set locked flag to false
 				locked=false;
 				// set the result of the action to true
@@ -91,7 +92,7 @@ public class CriticalSectionServer extends Rendezvous {
 				if (object.length>0) {
 					throw new IllegalArgumentException("No parameters should be provided to entry exitCriticalSection");
 				}
-				return CriticalSectionServer.this.call(this);
+				return CriticalSectionServer.this.call(this, object);
 			}
 		};
 		
