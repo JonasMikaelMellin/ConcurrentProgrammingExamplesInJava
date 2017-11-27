@@ -29,6 +29,7 @@ import se.his.iit.it325g.common.rendezvous.OrderingDefault;
 import se.his.iit.it325g.common.rendezvous.QueuedAndrewsProcess;
 import se.his.iit.it325g.common.rendezvous.Rendezvous;
 import se.his.iit.it325g.common.rendezvous.RendezvousCallImplementation;
+import se.his.iit.it325g.common.rendezvous.RendezvousCallMonitorImplementation;
 import se.his.iit.it325g.common.rendezvous.Result;
 import se.his.iit.it325g.examples.rendezvous.criticalSection.CriticalSectionServer;
 import se.his.iit.it325g.examples.rendezvous.readersWriters.ReaderWriterAccessServer;
@@ -48,7 +49,9 @@ public class ShortestJobNextServer extends Rendezvous {
 	private Result<Boolean> result=new Result<Boolean>(true);
 
 	
-	
+	public ShortestJobNextServer() {
+		super("Shortest Job Next Server",new RendezvousCallMonitorImplementation());
+	}
 	
 	/* (non-Javadoc)
 	 * @see se.his.iit.it325g.common.rendezvous.Rendezvous#initialize()
@@ -108,7 +111,7 @@ public class ShortestJobNextServer extends Rendezvous {
 			@Override
 			public boolean evaluate(Object[] parameter) {
 				// set locked flag to false
-				free=false;
+				free=true;
 				// set the result of the action to true
 				this.setResult(result);
 				// return that the evaluation of the action was successful

@@ -28,10 +28,10 @@ public class ClientSimulation implements Runnable {
 		while (true) {
 			int t=Math.abs(r.nextInt(100));
 			System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+" waiting at "+t);
-			GlobalProgramState.shortestJobNextMonitor.request(t);
+			GlobalProgramState.shortestJobNextAccess.request(t);
 			System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+" granted");
 			AndrewsProcess.uninterruptibleMinimumDelay(Math.abs(r.nextInt(100)));              
-			GlobalProgramState.shortestJobNextMonitor.release();
+			GlobalProgramState.shortestJobNextAccess.release();
 			System.out.println("Process "+AndrewsProcess.currentAndrewsProcessId()+" released");
 			AndrewsProcess.uninterruptibleMinimumDelay(Math.abs(r.nextInt(100)));
 			

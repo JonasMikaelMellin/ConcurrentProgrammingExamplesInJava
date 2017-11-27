@@ -29,9 +29,10 @@ public class GlobalProgramState {
 
 		RunnableSpecification rs[]=new RunnableSpecification[2];
 		rs[0]=new RunnableSpecification(ShortestJobNextServer.class,1);
-		rs[0]=new RunnableSpecification(ClientSimulation.class,10);
+		rs[1]=new RunnableSpecification(ClientSimulation.class,10);
 		try {
 			AndrewsProcess process[]=AndrewsProcess.andrewsProcessFactory(rs);
+			GlobalProgramState.shortestJobNextAccess=new ShortestJobNextAccess(process[0]);
 			AndrewsProcess.startAndrewsProcesses(process);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
