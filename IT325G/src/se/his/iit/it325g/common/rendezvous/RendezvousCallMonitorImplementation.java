@@ -37,7 +37,7 @@ public class RendezvousCallMonitorImplementation extends
 
 				this.rendezvous.s2eq.put(entry.getName(), eq);
 			}
-			eq.add(new QueuedAndrewsProcess(null,AndrewsProcess.currentAndrewsProcess(), parameter));
+			eq.add(new QueuedAndrewsProcess(entry,AndrewsProcess.currentAndrewsProcess(), parameter));
 			boolean guardFlag=entry.getGuard().evaluate(parameter);
 			while (!guardFlag || (guardFlag && !AndrewsProcess.currentAndrewsProcess().equals(eq.peek().getAndrewsProcess()))) {
 				try {
